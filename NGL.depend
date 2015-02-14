@@ -1,0 +1,225 @@
+# depslib dependency file v1.0
+1392721657 source:c:\projects\arm\ngl\src\lcd hal\lcd_gpio.c
+	"LCD_GPIO.h"
+
+1423838181 c:\projects\arm\ngl\src\lcd hal\lcd_gpio.h
+	<stdint.h>
+
+1423853896 source:c:\projects\arm\ngl\src\font.c
+	<math.h>
+	<string.h>
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"Font.h"
+	"MAL.h"
+	"colors.h"
+
+1423857191 c:\projects\arm\ngl\ngl.h
+	"NGL_types.h"
+	"LCD_HAL.h"
+
+1423844060 source:c:\projects\arm\ngl\src\lcd hal\lcd_hal.c
+	"LCD_HAL.h"
+
+1423832243 source:c:\projects\arm\ngl\src\lcd hal\r61581\r61581.c
+	"NGL_types.h"
+
+1423733913 source:c:\projects\arm\ngl\src\lcd hal\ssd1289\ssd1289.c
+	"NGL.h"
+
+1423844060 source:c:\projects\arm\ngl\src\mal.c
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"MAL.h"
+
+1423832525 source:c:\projects\arm\ngl\src\picojpeg.c
+	"picojpeg.h"
+
+1389463318 c:\projects\arm\ngl\src\picojpeg.h
+
+1423853790 source:c:\projects\arm\ngl\src\gui_elements.c
+	<string.h>
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"MAL.h"
+	"Graphics_Primitive.h"
+	"colors.h"
+	"Font.h"
+	"Picture.h"
+
+1423844097 source:c:\projects\arm\ngl\src\graphics_primitive.c
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"MAL.h"
+	"Graphics_Primitive.h"
+
+1423853952 source:c:\projects\arm\ngl\src\picture.c
+	<string.h>
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"MAL.h"
+	"Graphics_Primitive.h"
+	"picojpeg.h"
+	"colors.h"
+	"Picture.h"
+
+1423838936 D
+
+1423838246 c:\projects\arm\ngl\src\lcd hal\lcd_hal.h
+	"NGL_types.h"
+
+1423852186 c:\projects\arm\ngl\inc\ngl_types.h
+	<stdint.h>
+	"LCD_GPIO.h"
+
+1423838936 source:c:\projects\arm\ngl\src\colors.c
+	"colors.h"
+	"colors.h"
+
+1423838936 c:\projects\arm\ngl\inc\colors.h
+	<stdint.h>
+	<stdint.h>
+
+1423838181 c:\projects\arm\ngl\inc\mal.h
+	<stdint.h>
+	<stdint.h>
+
+1423844154 c:\projects\arm\ngl\inc\graphics_primitive.h
+	<stdint.h>
+	<stdint.h>
+
+1423851954 c:\projects\arm\ngl\inc\font.h
+	<stdint.h>
+	<stdint.h>
+
+1423847642 c:\projects\arm\ngl\inc\picture.h
+	<stdint.h>
+	<stdint.h>
+
+1423865890 source:c:\projects\arm\ngl\font\font.c
+	<math.h>
+	<string.h>
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"Font.h"
+	"MAL.h"
+	"colors.h"
+	<math.h>
+	<string.h>
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"Font.h"
+	"LCD_MAL.h"
+	"colors.h"
+
+1423862419 c:\projects\arm\ngl\ngl_types.h
+	<stdint.h>
+	"LCD_GPIO.h"
+	<stdint.h>
+	"LCD_GPIO.h"
+
+1423920092 c:\projects\arm\ngl\hal_mal\lcd_gpio.h
+	<stdint.h>
+
+1423920092 c:\projects\arm\ngl\hal_mal\lcd_hal.h
+	"NGL_types.h"
+
+1423851954 c:\projects\arm\ngl\font\font.h
+	<stdint.h>
+	<stdint.h>
+
+1423838181 c:\projects\arm\ngl\hal_mal\mal.h
+	<stdint.h>
+	<stdint.h>
+
+1423838936 c:\projects\arm\ngl\primitives\colors.h
+	<stdint.h>
+	<stdint.h>
+
+1423925597 source:c:\projects\arm\ngl\gui\gui_elements.c
+	<string.h>
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"LCD_MAL.h"
+	"Graphics_Primitive.h"
+	"colors.h"
+	"Font.h"
+	"Picture.h"
+
+1423862419 _bars
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"MAL.h"
+	"Graphics_Primitive.h"
+	"colors.h"
+	"Font.h"
+	"Picture.h"
+	<stdint.h>
+	"Graphics_Primitive.h"
+	"picojpeg.h"
+	"colors.h"
+	"Picture.h"
+
+1423925550 c:\projects\arm\ngl\primitives\graphics_primitive.h
+	<stdint.h>
+
+1423920092 c:\projects\arm\ngl\primitives\picture.h
+	<stdint.h>
+
+1423920092 source:c:\projects\arm\ngl\hal_mal\lcd_gpio.c
+	"LCD_GPIO.h"
+
+1392721657 h"
+
+1423920092 source:c:\projects\arm\ngl\hal_mal\lcd_hal.c
+	"LCD_HAL.h"
+
+1423844060 source:c:\projects\arm\ngl\hal_mal\mal.c
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"MAL.h"
+
+1423832243 source:c:\projects\arm\ngl\hal_mal\r61581\r61581.c
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"NGL_types.h"
+
+1423733913 source:c:\projects\arm\ngl\hal_mal\ssd1289\ssd1289.c
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"NGL.h"
+
+1423925650 source:c:\projects\arm\ngl\primitives\graphics_primitive.c
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"LCD_MAL.h"
+	"Graphics_Primitive.h"
+
+1423925670 source:c:\projects\arm\ngl\primitives\picture.c
+	<string.h>
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"LCD_MAL.h"
+	"Graphics_Primitive.h"
+	"picojpeg.h"
+	"colors.h"
+	"Picture.h"
+
+1423862419 "
+
+1423920092 c:\projects\arm\ngl\primitives\picojpeg.h
+
+1423838936 source:c:\projects\arm\ngl\primitives\colors.c
+	"colors.h"
+
+1423920092 source:c:\projects\arm\ngl\primitives\picojpeg.c
+	"picojpeg.h"
+
+1423918630 c:\projects\arm\ngl\hal_mal\lcd_mal.h
+	<stdint.h>
+
+1423862419 source:c:\projects\arm\ngl\hal_mal\lcd_mal.c
+	"NGL_types.h"
+	"LCD_HAL.h"
+	"LCD_MAL.h"
+
