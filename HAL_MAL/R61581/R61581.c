@@ -18,7 +18,7 @@
 /* Private function prototypes -----------------------------------------------*/
 static void R61581_WriteRAM_Prepare(void);
 static void R61581_Init(void);
-static void R61581_SetRotation(NGL_RotationType NewState);
+static void R61581_SetRotation(NGL_RotationLCD NewState);
 static void R61581_SetArea(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1);
 static void R61581_SetCursor(uint16_t X, uint16_t Y);
 static void R61581_GetPixels(uint8_t *ReadData, uint16_t NumPixels);
@@ -183,10 +183,10 @@ void R61581_Init(void)
 
 /**
   * @brief  R61581_SetRotation
-  * @param  NGL_RotationType NewState - new rotation state
+  * @param  NGL_RotationLCD NewState - new rotation state
   * @retval None
   */
-void R61581_SetRotation(NGL_RotationType NewState)
+void R61581_SetRotation(NGL_RotationLCD NewState)
 {
 		switch(NewState)
 		{

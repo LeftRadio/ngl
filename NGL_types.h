@@ -33,7 +33,8 @@ typedef enum {RESET = 0, SET = !RESET} FlagStatus;
 
 /* --------------------------  HAL/GL elements enums & structs  -------------------------- */
 typedef void (*pfunc)(void);
-typedef enum { _0_degree, _90_degree, _180_degree, _270_degree } NGL_RotationType;
+typedef enum { _0_degree, _90_degree, _180_degree, _270_degree } NGL_RotationLCD;
+typedef enum { NGL_Vertical, NGL_Horizontal } NGL_VertHoriz_Type;
 typedef enum { LCD_FSMC_Connect = 0, LCD_GPIO_Connect = 1 } NGL_HardConnectType;
 typedef enum { IN_OBJECT = 0, OUT_OBJECT = !IN_OBJECT } NGL_ClipMode;
 typedef enum { CLEAR = 0, DRAW = 1 } NGL_DrawState;
@@ -51,7 +52,7 @@ typedef struct
 	uint16_t X_Max, Y_Max;
 	uint32_t Max_Points;
 	uint16_t X_Register, Y_Register;
-	NGL_RotationType Rotation;
+	NGL_RotationLCD Rotation;
 
 	void (*WriteRAM_Prepare)(void);
 	void (*WriteCommand)(uint16_t Command);
@@ -60,7 +61,7 @@ typedef struct
 	void (*WritePixel)(uint16_t Data);
 
 	void (*ControllerInit)(void);
-	void (*SetRotation)(NGL_RotationType NewState);
+	void (*SetRotation)(NGL_RotationLCD NewState);
 	void (*SetArea)(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1);
 
 	void (*SetCursor)(uint16_t X, uint16_t Y);
@@ -150,6 +151,18 @@ typedef struct
 	const FunctionalState  EnableCentralLines;	//
 
 } NGL_Grid;
+
+/* NGL UI FillBar type */
+typedef struct
+{
+	const uint16_t X0, X1, Y0, Y1;
+	const NGL_VertHoriz_Type VertHoriz;
+	const uint16_t Level_MIN, Level_MAX;
+	uint16_t Level;
+	uint16_t Color;
+} NGL_FillBar;
+
+
 
 /* NGL Pages type */
 typedef struct

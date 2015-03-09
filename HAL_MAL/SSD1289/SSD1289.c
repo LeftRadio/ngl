@@ -18,7 +18,7 @@
 /* Private function prototypes -----------------------------------------------*/
 static void SSD1289_WriteRAM_Prepare(void);
 static void SSD1289_Init(void);
-static void SSD1289_SetRotation(NGL_RotationType NewState);
+static void SSD1289_SetRotation(NGL_RotationLCD NewState);
 static void SSD1289_SetArea(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1);
 static void SSD1289_SetCursor(uint16_t X, uint16_t Y);
 static void SSD1289_GetPixels(uint8_t *ReadData, uint16_t NumPixels);
@@ -130,10 +130,10 @@ void SSD1289_Init(void)
 
 /**
   * @brief  SSD1289_SetRotation
-  * @param  NGL_RotationType NewState - new rotation state
+  * @param  NGL_RotationLCD NewState - new rotation state
   * @retval None
   */
-void SSD1289_SetRotation(NGL_RotationType NewState)
+void SSD1289_SetRotation(NGL_RotationLCD NewState)
 {
 	CS_LCD_set;
 

@@ -128,7 +128,7 @@ LCD_Typedef* NGL_LCD_GetController_FromIndex(uint8_t index)
   * @param
   * @retval None
   */
-void NGL_LCD_SetRotation(NGL_RotationType NewState)
+void NGL_LCD_SetRotation(NGL_RotationLCD NewState)
 {
 	uint16_t tmp;
 

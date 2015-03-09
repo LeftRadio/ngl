@@ -59,7 +59,7 @@ void NGL_LCD_PutPixel(uint16_t Color)
   * @param  Counter - pixel counter to write, Color - pixels color
   * @retval None
   */
-static __inline void LCD_PutSeveralPixels(uint32_t Counter, uint16_t Color)
+static __inline void PutPixelsFast(uint32_t Counter, uint16_t Color)
 {
 	if(LCD->ConnectionType == LCD_GPIO_Connect)
 	{
@@ -127,7 +127,7 @@ void NGL_LCD_ClearArea(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint1
 	uint32_t pointCounter = ((X1 - X0) + 1) * ((Y1 - Y0) + 1);
 
 	LCD->SetArea(X0, Y0, X1, Y1);  // ”становка области вывода LCD равной области очистки
-	LCD_PutSeveralPixels(pointCounter, Color);
+	PutPixelsFast(pointCounter, Color);
 	NGL_LCD_SetFullScreen();
 }
 
@@ -140,7 +140,7 @@ void NGL_LCD_ClearArea(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint1
 void NGL_LCD_Clear_AllScreen(uint16_t Color)
 {
 	NGL_LCD_SetFullScreen();
-	LCD_PutSeveralPixels(LCD->Max_Points, Color);
+	PutPixelsFast(LCD->Max_Points, Color);
 }
 
 

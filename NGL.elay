@@ -1,20 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <EmBlocks_layout_file>
 	<ActiveTarget name="NGL" />
-	<File name="Font\Font.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Font\Font.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="494" topLine="0" />
+			<Cursor1 position="4280" topLine="60" />
 		</Cursor>
+		<Folding>
+			<Collapse line="40" />
+			<Collapse line="51" />
+			<Collapse line="72" />
+			<Collapse line="80" />
+			<Collapse line="82" />
+			<Collapse line="88" />
+			<Collapse line="90" />
+			<Collapse line="94" />
+			<Collapse line="98" />
+			<Collapse line="108" />
+			<Collapse line="130" />
+			<Collapse line="139" />
+			<Collapse line="160" />
+			<Collapse line="172" />
+			<Collapse line="193" />
+			<Collapse line="200" />
+			<Collapse line="221" />
+			<Collapse line="226" />
+			<Collapse line="243" />
+			<Collapse line="254" />
+			<Collapse line="263" />
+			<Collapse line="269" />
+			<Collapse line="272" />
+			<Collapse line="281" />
+			<Collapse line="301" />
+			<Collapse line="310" />
+			<Collapse line="316" />
+		</Folding>
 	</File>
 	<File name="Font\Font.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1499" topLine="3" />
 		</Cursor>
 	</File>
-	<File name="GUI\GUI_elements.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="GUI\GUI_elements.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="378" topLine="0" />
+			<Cursor1 position="9472" topLine="81" />
 		</Cursor>
+		<Folding>
+			<Collapse line="39" />
+			<Collapse line="50" />
+			<Collapse line="64" />
+			<Collapse line="68" />
+			<Collapse line="77" />
+			<Collapse line="84" />
+			<Collapse line="94" />
+			<Collapse line="97" />
+			<Collapse line="105" />
+			<Collapse line="127" />
+			<Collapse line="134" />
+			<Collapse line="138" />
+			<Collapse line="149" />
+			<Collapse line="161" />
+			<Collapse line="176" />
+			<Collapse line="215" />
+			<Collapse line="229" />
+			<Collapse line="248" />
+			<Collapse line="252" />
+			<Collapse line="255" />
+			<Collapse line="257" />
+			<Collapse line="275" />
+			<Collapse line="279" />
+			<Collapse line="282" />
+			<Collapse line="284" />
+			<Collapse line="307" />
+			<Collapse line="317" />
+			<Collapse line="324" />
+			<Collapse line="335" />
+			<Collapse line="342" />
+		</Folding>
 	</File>
 	<File name="HAL_MAL\LCD_GPIO.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
@@ -39,9 +100,9 @@
 			<Collapse line="38" />
 		</Folding>
 	</File>
-	<File name="HAL_MAL\LCD_HAL.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="HAL_MAL\LCD_HAL.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3050" topLine="62" />
+			<Cursor1 position="3598" topLine="99" />
 		</Cursor>
 		<Folding>
 			<Collapse line="46" />
@@ -69,7 +130,118 @@
 	</File>
 	<File name="HAL_MAL\LCD_HAL.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1116" topLine="3" />
+			<Cursor1 position="1115" topLine="0" />
 		</Cursor>
+		<Folding>
+			<Collapse line="10" />
+		</Folding>
+	</File>
+	<File name="HAL_MAL\LCD_MAL.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1753" topLine="65" />
+		</Cursor>
+		<Folding>
+			<Collapse line="29" />
+			<Collapse line="42" />
+			<Collapse line="44" />
+			<Collapse line="50" />
+			<Collapse line="62" />
+			<Collapse line="64" />
+			<Collapse line="69" />
+			<Collapse line="94" />
+			<Collapse line="96" />
+			<Collapse line="102" />
+			<Collapse line="114" />
+			<Collapse line="125" />
+			<Collapse line="140" />
+		</Folding>
+	</File>
+	<File name="HAL_MAL\R61581\R61581.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5595" topLine="36" />
+		</Cursor>
+		<Folding>
+			<Collapse line="28" />
+			<Collapse line="63" />
+			<Collapse line="74" />
+			<Collapse line="191" />
+			<Collapse line="235" />
+			<Collapse line="254" />
+			<Collapse line="277" />
+			<Collapse line="286" />
+		</Folding>
+	</File>
+	<File name="HAL_MAL\SSD1289\SSD1289.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5012" topLine="60" />
+		</Cursor>
+		<Folding>
+			<Collapse line="62" />
+			<Collapse line="73" />
+			<Collapse line="140" />
+			<Collapse line="202" />
+			<Collapse line="215" />
+			<Collapse line="224" />
+			<Collapse line="243" />
+		</Folding>
+	</File>
+	<File name="NGL.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2034" topLine="33" />
+		</Cursor>
+	</File>
+	<File name="NGL_types.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1418" topLine="17" />
+		</Cursor>
+	</File>
+	<File name="Primitives\Graphics_Primitive.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5958" topLine="225" />
+		</Cursor>
+	</File>
+	<File name="Primitives\Picture.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="472" topLine="3" />
+		</Cursor>
+		<Folding>
+			<Collapse line="41" />
+			<Collapse line="45" />
+			<Collapse line="48" />
+			<Collapse line="68" />
+			<Collapse line="72" />
+			<Collapse line="86" />
+			<Collapse line="88" />
+			<Collapse line="101" />
+			<Collapse line="116" />
+			<Collapse line="123" />
+			<Collapse line="126" />
+			<Collapse line="135" />
+			<Collapse line="147" />
+			<Collapse line="154" />
+			<Collapse line="156" />
+			<Collapse line="165" />
+			<Collapse line="177" />
+			<Collapse line="184" />
+			<Collapse line="187" />
+			<Collapse line="194" />
+			<Collapse line="203" />
+			<Collapse line="215" />
+			<Collapse line="235" />
+			<Collapse line="254" />
+			<Collapse line="261" />
+			<Collapse line="263" />
+			<Collapse line="271" />
+			<Collapse line="276" />
+			<Collapse line="280" />
+			<Collapse line="290" />
+			<Collapse line="293" />
+			<Collapse line="304" />
+			<Collapse line="307" />
+			<Collapse line="332" />
+			<Collapse line="347" />
+			<Collapse line="357" />
+			<Collapse line="367" />
+		</Folding>
 	</File>
 </EmBlocks_layout_file>

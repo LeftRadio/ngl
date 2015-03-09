@@ -52,6 +52,16 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="HAL_MAL\LCD_HAL.h" />
+		<Unit filename="HAL_MAL\LCD_MAL.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="HAL_MAL\LCD_MAL.h" />
+		<Unit filename="HAL_MAL\R61581\R61581.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="HAL_MAL\SSD1289\SSD1289.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="NGL.h" />
 		<Unit filename="NGL_types.h" />
 		<Unit filename="Primitives\Graphics_Primitive.c">
@@ -71,6 +81,15 @@
 		</Unit>
 		<Unit filename="Primitives\picojpeg.h" />
 		<Extensions>
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 			<code_completion />
 			<debugger />
 			<envvars />
