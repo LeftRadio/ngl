@@ -68,7 +68,7 @@ static __inline void PutPixelsFast(uint32_t Counter, uint16_t Color)
 		/* Write pointers */
 		do
 		{
-			LCD_GPIO_DATA(Color);
+			LCD->WritePixel(Color);
 			WR_LCD_clr;	WR_LCD_set;
 		}
 		while(Counter--);

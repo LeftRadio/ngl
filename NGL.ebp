@@ -10,6 +10,7 @@
 			<Target title="NGL">
 				<Option output=".\NGL.a" />
 				<Option type="1" />
+				<Option create_hex="1" />
 				<Option compiler="armgcc_eb" />
 				<Device>
 					<Add option="$device=cortex-m4" />
@@ -17,14 +18,11 @@
 					<Add option="$lscript=.\NGL.ld" />
 				</Device>
 				<Compiler>
-					<Add option="-mfloat-abi=hard" />
 					<Add option="-Wall" />
-					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
-					<Add option="-O3" />
-					<Add option="-DSTM32F407VE" />
-					<Add option="-DSTM32F4XX" />
-					<Add option="-D__FPU_USED" />
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-g" />
+					<Add option="-O0" />
 					<Add directory="." />
 				</Compiler>
 				<Linker>
@@ -33,63 +31,63 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add directory="src" />
-			<Add directory="src\LCD HAL" />
+			<Add directory="Primitives" />
+			<Add directory="HAL_MAL" />
+			<Add directory="GUI" />
+			<Add directory="Font" />
 		</Compiler>
-		<Unit filename="Font\Font.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Font\Font.h" />
-		<Unit filename="GUI\GUI_elements.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="GUI\GUI_elements.h" />
-		<Unit filename="HAL_MAL\LCD_GPIO.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="HAL_MAL\LCD_GPIO.h" />
-		<Unit filename="HAL_MAL\LCD_HAL.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="HAL_MAL\LCD_HAL.h" />
 		<Unit filename="HAL_MAL\LCD_MAL.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="HAL_MAL\LCD_MAL.h" />
 		<Unit filename="HAL_MAL\R61581\R61581.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="HAL_MAL\SSD1289\SSD1289.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="NGL.h" />
-		<Unit filename="NGL_types.h" />
-		<Unit filename="Primitives\Graphics_Primitive.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Primitives\Graphics_Primitive.h" />
 		<Unit filename="Primitives\Picture.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="Primitives\Picture.h" />
-		<Unit filename="Primitives\colors.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Primitives\colors.h" />
-		<Unit filename="Primitives\picojpeg.c">
+		<Unit filename="Font\Font.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Primitives\picojpeg.h" />
+		<Unit filename="HAL_MAL\LCD_GPIO.h" />
+		<Unit filename="Primitives\colors.h" />
+		<Unit filename="HAL_MAL\LCD_GPIO.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="GUI\GUI_elements.h" />
+		<Unit filename="Primitives\Graphics_Primitive.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="HAL_MAL\HX8352\HX8352.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Primitives\picojpeg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="HAL_MAL\MAL.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="HAL_MAL\LCD_HAL.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="NGL.h" />
+		<Unit filename="Primitives\Graphics_Primitive.h" />
+		<Unit filename="NGL_types.h" />
+		<Unit filename="HAL_MAL\LCD_HAL.h" />
+		<Unit filename="Primitives\colors.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="HAL_MAL\LCD_MAL.h" />
+		<Unit filename="Primitives\Picture.h" />
+		<Unit filename="Font\Font.h" />
+		<Unit filename="HAL_MAL\SSD1289\SSD1289.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="HAL_MAL\MAL.h" />
+		<Unit filename="GUI\GUI_elements.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
-			<DoxyBlocks>
-				<comment_style block="0" line="0" />
-				<doxyfile_project />
-				<doxyfile_build />
-				<doxyfile_warnings />
-				<doxyfile_output />
-				<doxyfile_dot />
-				<general />
-			</DoxyBlocks>
 			<code_completion />
 			<debugger />
 			<envvars />

@@ -18,11 +18,12 @@
 
 /* Exported define ------------------------------------------------------------*/
 #define NGL_MAX_BUTTONS				20
-#define NGL_MAX_LABELS				30
+#define NGL_MAX_LABELS				    30
 #define NGL_LABEL_MAX_CHARS			30
 
-#define __R61581__                  0
-#define __SSD1289__                 1
+#define __R61581__                          0
+#define __SSD1289__                        1
+#define __HX8352__                          2
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported typedef ----------------------------------------------------------*/

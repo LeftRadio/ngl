@@ -105,14 +105,14 @@
 	"LCD_MAL.h"
 	"colors.h"
 
-1424009185 c:\projects\arm\ngl\ngl_types.h
+1426020119 c:\projects\arm\ngl\ngl_types.h
 	<stdint.h>
 	"LCD_GPIO.h"
 
 1423920092 c:\projects\arm\ngl\hal_mal\lcd_gpio.h
 	<stdint.h>
 
-1424004183 c:\projects\arm\ngl\hal_mal\lcd_hal.h
+1424112442 c:\projects\arm\ngl\hal_mal\lcd_hal.h
 	"NGL_types.h"
 
 1423851954 c:\projects\arm\ngl\font\font.h
@@ -127,7 +127,7 @@
 	<stdint.h>
 	<stdint.h>
 
-1424009185 source:c:\projects\arm\ngl\gui\gui_elements.c
+1424112442 source:c:\projects\arm\ngl\gui\gui_elements.c
 	<string.h>
 	"NGL_types.h"
 	"LCD_HAL.h"
@@ -170,15 +170,13 @@
 	"LCD_HAL.h"
 	"MAL.h"
 
-1423832243 source:c:\projects\arm\ngl\hal_mal\r61581\r61581.c
+1424112442 source:c:\projects\arm\ngl\hal_mal\r61581\r61581.c
 	"NGL_types.h"
 	"LCD_HAL.h"
-	"NGL_types.h"
 
-1423733913 source:c:\projects\arm\ngl\hal_mal\ssd1289\ssd1289.c
+1424112442 source:c:\projects\arm\ngl\hal_mal\ssd1289\ssd1289.c
 	"NGL_types.h"
 	"LCD_HAL.h"
-	"NGL.h"
 
 1423925650 source:c:\projects\arm\ngl\primitives\graphics_primitive.c
 	"NGL_types.h"

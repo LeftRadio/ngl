@@ -17,7 +17,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Extern variables ----------------------------------------------------------*/
-extern LCD_Typedef R61581, SSD1289;
+extern LCD_Typedef R61581, SSD1289, HX8352;
 
 /* Private variables ---------------------------------------------------------*/
 LCD_Typedef *LCD = &R61581;
@@ -28,7 +28,7 @@ static void NGL_LCD_FSMC_WriteData(uint16_t Data);
 static uint16_t NGL_LCD_FSMC_ReadData(void);
 
 static void NGL_LCD_GPIO_WriteCommand(uint16_t Data);
-static __inline void NGL_LCD_GPIO_WriteData(uint16_t Data);
+static void NGL_LCD_GPIO_WriteData(uint16_t Data);
 static void NGL_LCD_GPIO_WriteData_16bpp_8b(uint16_t Data);
 static void NGL_LCD_GPIO_WriteData_18bpp_8b(uint16_t Data);
 static void NGL_LCD_GPIO_WriteData_18bpp_16b(uint16_t Data);
@@ -117,6 +117,9 @@ LCD_Typedef* NGL_LCD_GetController_FromIndex(uint8_t index)
     case 1:
         return &SSD1289;
         break;
+    case 2:
+    	return &HX8352;
+            break;
     default:
         return (void*)0;
     }
@@ -203,7 +206,7 @@ static void NGL_LCD_GPIO_WriteCommand(uint16_t Data)
   * @param
   * @retval None
   */
-static __inline void NGL_LCD_GPIO_WriteData(uint16_t Data)
+static void NGL_LCD_GPIO_WriteData(uint16_t Data)
 {
 	LCD_GPIO_DATA(Data);
 	LCD_WriteStrobe();

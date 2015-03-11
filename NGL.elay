@@ -77,64 +77,41 @@
 			<Collapse line="342" />
 		</Folding>
 	</File>
+	<File name="HAL_MAL\HX8352\HX8352.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3537" topLine="26" />
+		</Cursor>
+	</File>
 	<File name="HAL_MAL\LCD_GPIO.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="385" topLine="6" />
+			<Cursor1 position="1633" topLine="0" />
 		</Cursor>
-		<Folding>
-			<Collapse line="28" />
-			<Collapse line="35" />
-			<Collapse line="42" />
-			<Collapse line="49" />
-			<Collapse line="56" />
-			<Collapse line="63" />
-		</Folding>
 	</File>
 	<File name="HAL_MAL\LCD_GPIO.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2331" topLine="41" />
+			<Cursor1 position="2168" topLine="33" />
 		</Cursor>
-		<Folding>
-			<Collapse line="19" />
-			<Collapse line="31" />
-			<Collapse line="38" />
-		</Folding>
 	</File>
 	<File name="HAL_MAL\LCD_HAL.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3598" topLine="99" />
+			<Cursor1 position="5360" topLine="171" />
 		</Cursor>
 		<Folding>
-			<Collapse line="46" />
-			<Collapse line="48" />
-			<Collapse line="55" />
-			<Collapse line="60" />
-			<Collapse line="64" />
-			<Collapse line="68" />
-			<Collapse line="72" />
-			<Collapse line="92" />
+			<Collapse line="98" />
 			<Collapse line="110" />
-			<Collapse line="112" />
 			<Collapse line="131" />
-			<Collapse line="141" />
 			<Collapse line="157" />
 			<Collapse line="168" />
 			<Collapse line="179" />
-			<Collapse line="190" />
-			<Collapse line="206" />
 			<Collapse line="218" />
 			<Collapse line="233" />
 			<Collapse line="251" />
-			<Collapse line="266" />
 		</Folding>
 	</File>
 	<File name="HAL_MAL\LCD_HAL.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1115" topLine="0" />
+			<Cursor1 position="407" topLine="0" />
 		</Cursor>
-		<Folding>
-			<Collapse line="10" />
-		</Folding>
 	</File>
 	<File name="HAL_MAL\LCD_MAL.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
@@ -173,11 +150,12 @@
 	</File>
 	<File name="HAL_MAL\SSD1289\SSD1289.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="5012" topLine="60" />
+			<Cursor1 position="6774" topLine="78" />
 		</Cursor>
 		<Folding>
 			<Collapse line="62" />
 			<Collapse line="73" />
+			<Collapse line="136" />
 			<Collapse line="140" />
 			<Collapse line="202" />
 			<Collapse line="215" />
@@ -185,15 +163,26 @@
 			<Collapse line="243" />
 		</Folding>
 	</File>
-	<File name="NGL.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="NGL.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2034" topLine="33" />
+			<Cursor1 position="215" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="NGL_types.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1418" topLine="17" />
+			<Cursor1 position="889" topLine="12" />
 		</Cursor>
+		<Folding>
+			<Collapse line="48" />
+			<Collapse line="73" />
+			<Collapse line="80" />
+			<Collapse line="92" />
+			<Collapse line="109" />
+			<Collapse line="120" />
+			<Collapse line="145" />
+			<Collapse line="157" />
+			<Collapse line="169" />
+		</Folding>
 	</File>
 	<File name="Primitives\Graphics_Primitive.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
