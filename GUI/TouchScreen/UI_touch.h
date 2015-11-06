@@ -1,30 +1,36 @@
 /**
   ******************************************************************************
-  * @file       clip.h
-  * @author     LeftRadio
-  * @version    V1.0.0
+  * @file	 	UI_touch.h
+  * @author  	Neil Lab :: Left Radio
+  * @version 	v1.0.0
   * @date
-  * @brief
+  * @brief		header
   ******************************************************************************
 **/
 
-#ifndef __CLIP_H
-#define __CLIP_H
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __UI_TOUCH_H
+#define __UI_TOUCH_H
 
 /* Includes ------------------------------------------------------------------*/
-/* Exported typedef -----------------------------------------------------------*/
+#include "NGL_types.h"
+
 /* Exported define -----------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported typedef ----------------------------------------------------------*/
+
+
+
 /* Exported variables --------------------------------------------------------*/
-/* Exported function --------------------------------------------------------*/
-extern ErrorStatus NGL_GP_NewClipObject(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, NGL_ClipType clipType, uint8_t NumInd);
-extern ErrorStatus NGL_GP_ClipClearObject(uint8_t NumInd);
-
-extern FlagStatus NGL_GP_ClipPoint(uint16_t X0, uint16_t Y0);
-extern FlagStatus NGL_GP_ClipLine(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1);
+/* Exported function ---------------------------------------------------------*/
 
 
 
-#endif /* __CLIP_H */
+
+
+
+
+#endif /* __UI_TOUCH_H */
 /*********************************************************************************************************
       END FILE
 *********************************************************************************************************/

@@ -17,15 +17,19 @@
 #include "LCD_GPIO.h"
 
 /* Exported define ------------------------------------------------------------*/
-#define NGL_MAX_BUTTONS				20
-#define NGL_MAX_LABELS				    30
-#define NGL_LABEL_MAX_CHARS			30
+#define NGL_MAX_BUTTONS						20
+#define NGL_MAX_LABELS						30
+#define NGL_LABEL_MAX_CHARS					30
+#define NGL_GUI_TOUCH_NO_OBJECT				(int8_t)(-1)
 
-#define __R61581__                          0
-#define __SSD1289__                        1
+#define __R61581__                  		0
+#define __SSD1289__                 		1
 #define __HX8352__                          2
 
 /* Exported macro ------------------------------------------------------------*/
+#define nMIN(a,b) (((a)<(b))?(a):(b))
+#define nMAX(a,b) (((a)>(b))?(a):(b))
+
 /* Exported typedef ----------------------------------------------------------*/
 typedef enum {FALSE = 0, TRUE = !FALSE} bool;
 typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
@@ -33,7 +37,7 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
 typedef enum {RESET = 0, SET = !RESET} FlagStatus;
 
 /* --------------------------  HAL/GL elements enums & structs  -------------------------- */
-typedef void (*pfunc)(void);
+typedef void (*pEvent)(void);
 typedef enum { _0_degree, _90_degree, _180_degree, _270_degree } NGL_RotationLCD;
 typedef enum { NGL_Vertical, NGL_Horizontal } NGL_VertHoriz_Type;
 typedef enum { LCD_FSMC_Connect = 0, LCD_GPIO_Connect = 1 } NGL_HardConnectType;
@@ -43,10 +47,11 @@ typedef enum { Transparent = 0, NotTransparent = 1 } NGL_TransparentState;
 typedef enum { TextButton, ColorFillButton, IconButton } NGL_ButtonType;
 typedef enum { ReClick_ENABLE, ReClick_DISABLE } NGL_ReClickState;
 typedef enum { ResetButton = 0, SelectedButton = 1 } NGL_ButtonState;
+typedef enum { NGL_ClipIN, NGL_ClipOUT } NGL_ClipType;
+
 
 /* LCD object type */
-typedef struct
-{
+typedef struct {
 	NGL_HardConnectType ConnectionType;
 	uint8_t DataBusBits;
 	uint8_t ColorBits;
@@ -70,27 +75,33 @@ typedef struct
 
 } LCD_Typedef;
 
+
+
+/* --------------------------------  Font elements structs  -------------------------------- */
+
 /* Font chars table element type */
 typedef struct {
-	const uint16_t	width;			// Ширина символа
-	const uint16_t	start;			// Стартовый индекс на первый байт символа в массиве данных символов
+	const uint16_t	width;
+	const uint16_t	height;
+	const uint16_t	start;
 } NGL_CharInfo;
 
 /* NGL Font type */
-typedef struct
-{
-	const uint8_t Height;			// Высота символов
-	const uint8_t HeightBytes;		// Высота символов в байтах
-	const uint8_t FirstChar;		// Индекс первого символа
-	const uint8_t LastChar;			// Индекс последнего символа
-	const uint8_t FontSpace;		// Пробел между символами
-	const NGL_CharInfo *CharTable;	// Таблица индексов символов
-	const uint8_t *CharBitmaps;		// Указатель на массив с данными о символах
+typedef struct {
+	const uint8_t Height;
+//	const uint8_t HeightBytes;
+	const uint8_t FirstChar;
+	const uint8_t LastChar;
+	const uint8_t FontSpace;
+	const NGL_CharInfo *CharTable;
+	const uint8_t *CharBitmaps;
 } NGL_Font;
 
+
+/* --------------------------------  Image elements structs  -------------------------------- */
+
 /* NGL Image type */
-typedef struct
-{
+typedef struct {
    const uint16_t Width;			// Picture Width
    const uint16_t Height;			// Picture Height
    const uint8_t Compressed;		// Copressed flag, 0 - NonCompressed, 1- RLE, 2 - picoJPG
@@ -100,14 +111,19 @@ typedef struct
    const uint32_t DataArraySize;	// Last index of bitmap data array
 
    const void *Data;				// data pointer
-
 } NGL_Image;
 
 
 /* --------------------------------  UI elements structs  -------------------------------- */
+
+/* NGL Point type */
+typedef struct {
+  uint16_t X;
+  uint16_t Y;
+} NGL_Point;
+
 /* NGL Label type */
-typedef struct
-{
+typedef struct {
 	const uint16_t X;					        // Left X coordinate
 	const uint16_t Y;					        // Down Y coordinate
 	uint16_t Color;						        // Text color
@@ -117,8 +133,7 @@ typedef struct
 } NGL_Label;
 
 /* NGL UI Button type */
-typedef struct
-{
+typedef struct {
 	const uint16_t X;					    // Left X coordinate
 	const uint16_t Y;					    // Down Y coordinate
 	const uint16_t Width;				    // Button width (X1 = X0 + Width)
@@ -138,56 +153,111 @@ typedef struct
 	FunctionalState Visible;			    // Visible state
 	FlagStatus Enabled;					    // Enabled state, if RESET button not active and not request all clicks events
 
-	const pfunc ClickEvent;                 // Click event function pointer
+	const pEvent ClickEvent;                 // Click event function pointer
 } NGL_Button;
 
 /* NGL UI Grid type */
-typedef struct
-{
-	const uint16_t CenterX;						//
-	const uint16_t CenterY;						//
-	const uint16_t Width;						//
-	const uint16_t Height;						//
-	const uint16_t Color;						//
-	const FunctionalState  EnableCentralLines;	//
-
+typedef struct {
+	const uint16_t CenterX;					//
+	const uint16_t CenterY;					//
+	const uint16_t Width;					//
+	const uint16_t Height;					//
+	const uint16_t Color;					//
+	const FunctionalState  CentralLines;	//
 } NGL_Grid;
 
 /* NGL UI FillBar type */
-typedef struct
-{
-	const uint16_t X0, X1, Y0, Y1;
-	const NGL_VertHoriz_Type VertHoriz;
+typedef struct {
+	const uint16_t X0, Y0, X1, Y1;
+	const NGL_VertHoriz_Type Orientation;
 	const uint16_t Level_MIN, Level_MAX;
 	uint16_t Level;
+    uint16_t sfX1, sfY1;
+	FunctionalState Logarithmic;
+	uint16_t FullScale_dB;
+	FunctionalState Border;
+	FunctionalState Markers;
+	uint16_t MarkersColor;
 	uint16_t Color;
 } NGL_FillBar;
 
+/* NGL UI SeekBar type */
+typedef struct {
+	const uint16_t X0, Y0, X1, Y1;
+    uint16_t old_posX, old_posY;
+	const NGL_VertHoriz_Type Orientation;
+	const int16_t Level_MIN, Level_MAX;
+	int16_t Level;
+    FunctionalState ShowProgress;
+	uint16_t Color;
+    uint16_t SliderColor;
+} NGL_SeekBar;
 
+/* NGL UI FillBar type */
+typedef struct {
+    const uint16_t X0, Y0, X1, Y1;
+    int MIN, MAX;
+    int Cent;
+    const int Labels[20];
+    char *Units;
+    FunctionalState ShowLabels;
+    FunctionalState ShowLines;
+    FunctionalState Flip;
+    const NGL_VertHoriz_Type Orientation;
+    NGL_Font* Font;
+    uint16_t Color;
+} NGL_GraphScale;
+
+/* NGL UI CheckBox type */
+typedef struct {
+    const uint16_t X0, Y0, X1, Y1;
+    FunctionalState Checked;
+    const NGL_Font* Font;
+    const char* Text;
+    uint16_t Color;
+    uint16_t TextColor;
+    const pEvent ClickEvent;
+} NGL_CheckBox;
+
+/* NGL UI page objects type */
+typedef struct {
+    const NGL_Button **buttons;
+    const NGL_Label **lables;
+    const NGL_FillBar **fillbars;
+    const NGL_SeekBar **seekbars;
+    const NGL_GraphScale **graphscales;
+} NGL_Objects;
 
 /* NGL Pages type */
-typedef struct
-{
-	const uint16_t Size[4];				                // [X0, Y0, X1, Y1]
-	const FunctionalState ClipState;	                // Clip for Page/Menu
-	const uint8_t Clip_ID;     			                // Clip object ID
+typedef struct {
+	const uint16_t Size[4];		// [X0, Y0, X1, Y1]
+	const uint8_t ID;			// Clip object ID
 	const uint16_t BackColor;
-	const uint8_t FirstButtonsIndex;     	            // First item index
-	const uint8_t ButtonsCount;				            // All items count
-	uint8_t SelectedButtonsIndex;		                // Selected item index
-	uint8_t OldButtonsIndex;			                // Old selected item index
-	uint8_t LabelsCount;			                    // Old selected item index
-	const NGL_Button* Buttons[NGL_MAX_BUTTONS];     	// Items pointers array
-	const NGL_Label* Labels[NGL_MAX_LABELS];			// Items pointers array
-	const bool ExitAllowed;				                // Exit allowed
+	const bool ExitAllowed;		// Exit allowed
 
-	const pfunc Draw;
-	const pfunc CallBack;
+	NGL_Objects Objects;
+
+	const pEvent Draw;
+	const pEvent Click;			// Page click (or index change) function
 } NGL_Page;
+
+
+
+typedef struct  {
+    uint16_t X_Left;
+    uint16_t Y_Down;
+    uint16_t X_Right;
+    uint16_t Y_Up;
+    uint8_t NumInd;
+    NGL_ClipType Type;
+    FunctionalState State;
+    FlagStatus (*pClipLine)(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1, uint8_t objNum);
+} NGL_ClipObject;
 
 
 /* Exported variables --------------------------------------------------------*/
 /* Exported function ---------------------------------------------------------*/
+
 
 
 

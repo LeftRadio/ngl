@@ -19,8 +19,6 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported typedef ----------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
-//extern volatile uint16_t TextColor, BackColor, GraphicsColor;
-
 /* Exported function ---------------------------------------------------------*/
 void NGL_Color_SetTextColor(uint16_t color);
 uint16_t NGL_Color_GetTextColor(void);

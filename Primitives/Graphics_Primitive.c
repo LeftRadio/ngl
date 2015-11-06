@@ -173,8 +173,8 @@ void NGL_GP_DrawLine(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_
 			LCD->SetCursor(X0, Y0);
 			LCD->WritePixel(Color);
 
-			X0++;
-			Y0++;
+			X0 += XDir;
+			Y0 += YDir;
 		}
 		while (--DeltaY != 0);
 		CS_LCD_clr;
@@ -218,11 +218,14 @@ void NGL_GP_DrawLine(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_
   */
 void NGL_GP_DrawRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color)
 {
-	NGL_GP_Draw_Vertical_Line(X0, Y0, Y1 - Y0, Color);     // Left
-	NGL_GP_Draw_Vertical_Line(X1, Y0, Y1 - Y0, Color);     // Right
+    int yl = (Y1 - Y0);
+    int xl = (X1 - X0);
 
-	NGL_GP_Draw_Horizontal_Line(X0, Y0, X1 - X0, Color);   // Bottom
-	NGL_GP_Draw_Horizontal_Line(X0, Y1, X1 - X0, Color);   // Top
+	NGL_GP_Draw_Vertical_Line(X0, Y0, yl, Color);     // Left
+	NGL_GP_Draw_Vertical_Line(X1, Y0, yl, Color);     // Right
+
+	NGL_GP_Draw_Horizontal_Line(X0, Y0, xl, Color);   // Bottom
+	NGL_GP_Draw_Horizontal_Line(X0, Y1, xl, Color);   // Top
 }
 
 
@@ -233,14 +236,13 @@ void NGL_GP_DrawRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_
             border, borderColor
   * @retval None
   */
-void NGL_GP_DrawFillRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color, NGL_DrawState border, uint16_t borderColor)
+void NGL_GP_DrawFillRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color, FunctionalState border, uint16_t borderColor)
 {
 	/* Fill rectangle */
 	NGL_LCD_ClearArea(X0, Y0, X1, Y1, Color);
 
 	/* Set new graphics color and draw border */
-	if(border == DRAW)
-	{
+	if(border == ENABLE) {
 		NGL_GP_DrawRect(X0, Y0, X1, Y1, borderColor);
 	}
 }
@@ -415,23 +417,6 @@ void NGL_GP_DrawFillBeveledRect(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t 
 
 	NGL_LCD_SetFullScreen();
 }
-
-
-
-///******************************************************************************
-//* Function Name  : LCD_DrawTriangle
-//* Description    : Нарисовать треугольник
-//* Input          : X0, Y0, X1, Y1, X2, Y2, Color
-//* Return         : None
-//*******************************************************************************/
-//void LCD_DrawTriangle(uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t X3, uint16_t Y3, uint16_t Color)
-//{
-//   GraphicsColor = Color;
-//
-//   LCD_DrawLine(X1, Y1, X2, Y2);
-//   LCD_DrawLine(X1, Y1, X3, Y3);
-//   LCD_DrawLine(X2, Y2, X3, Y3);
-//}
 
 
 

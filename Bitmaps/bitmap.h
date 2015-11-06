@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file		Picture.h
+  * @file		bitmap.h
   * @author		LeftRadio
   * @version	V1.1.0
   * @date
-  * @brief		NGL :: Picture Layer header
+  * @brief		NGL :: bitmaps Layer header
   ******************************************************************************
 **/
 

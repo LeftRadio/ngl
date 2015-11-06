@@ -1,14 +1,15 @@
 /**
   ******************************************************************************
-  * @file		colors.c
-  * @author		Neil Lab :: Left Radio
-  * @version	v1.0.0
-  * @date		2015-02-13-15.43
-  * @brief		sourse
+  * @file		   colors.c
+  * @author		 Neil Lab :: Left Radio
+  * @version	 v1.2.0
+  * @date		   2015-02-13-15.43
+  * @brief		 sourse
   ******************************************************************************
 **/
 
 /* Includes ------------------------------------------------------------------*/
+#include "NGL_types.h"
 #include "colors.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,16 +95,19 @@ uint16_t NGL_Color_GetBackColor(void)
   * @param
   * @retval None
   */
-uint16_t NGL_Color_SetBrightness(uint16_t ColorIn, int8_t BrightLevel)
+uint16_t NGL_Color_SetBrightness(uint16_t ColorIn, int8_t level)
 {
 	int32_t R = 0, G = 0, B = 0;
 
-	if(BrightLevel > 32) BrightLevel = 32;
-	else if(BrightLevel < -32) BrightLevel = -32;
+  if(level == 0) {
+      return ColorIn;
+  }
 
-	R = ((ColorIn & 0xF800) >> 11) + (BrightLevel);
-	G = ((ColorIn & 0x07E0) >> 5) + (BrightLevel * 2);
-	B = (ColorIn & 0x001F) + (BrightLevel);
+  level = nMIN( nMAX(-32, level), 32 );
+
+	R = ((ColorIn & 0xF800) >> 11) + (level);
+	G = ((ColorIn & 0x07E0) >> 5) + (level * 2);
+	B = (ColorIn & 0x001F) + (level);
 
 	if(R < 0) R = 0;
 	else if(R > 31) R = 31;
@@ -113,7 +117,6 @@ uint16_t NGL_Color_SetBrightness(uint16_t ColorIn, int8_t BrightLevel)
 
 	if(B < 0) B = 0;
 	else if(B > 31) B = 31;
-
 
 	return (uint16_t)((R << 11) | (G << 5) | (B));
 }

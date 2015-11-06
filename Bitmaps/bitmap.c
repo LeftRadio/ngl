@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    	Picture.c
+  * @file    	bitmap.c
   * @author  	LeftRadio
   * @version 	1.2.0
   * @date
-  * @brief		NGL :: Picture Layer sourse
+  * @brief		NGL :: Bitmaps Layer sourse
   ******************************************************************************
 **/
 
@@ -12,12 +12,13 @@
 #include <string.h>
 
 #include "NGL_types.h"
+#include "bitmap.h"
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
 #include "Graphics_Primitive.h"
 #include "picojpeg.h"
 #include "colors.h"
-#include "Picture.h"
+
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -100,11 +101,12 @@ static __inline void PutOut_16bpp_Pixels(uint16_t *Data, uint16_t iterationFlag,
   */
 static __inline uint16_t ConvertTo565Color(uint8_t R, uint8_t G, uint8_t B)
 {
-	uint16_t a = (uint16_t)(((R >> 3) & 0x3F) << 11);
-	uint16_t b = (uint16_t)(((G >> 2) & 0x7F) << 5);
-	uint16_t c = (uint16_t)((B >> 3) & 0x3F);
+//	uint16_t a = (uint16_t)(((R >> 3) & 0x3F) << 11);
+//	uint16_t b = (uint16_t)(((G >> 2) & 0x7F) << 5);
+//	uint16_t c = (uint16_t)((B >> 3) & 0x3F);
 
-	return (a | b | c);
+//	return (a | b | c);
+	return ((R & 0xF8) << 8) | ((G & 0xFC) << 3) | (B >> 3);
 }
 
 
@@ -187,8 +189,8 @@ static void LCD_Draw_16bpp_IMG(const NGL_Image *Bitmap)
 		while(pnt < MAXpnt)
 		{
 			Data += 1 - iterationFlag;
-			iterationFlag = 1 - ((*Data & 0x0080) >> 7);
-			cnt = (*Data & 0x007F) + 1;
+			iterationFlag = ((*Data & 0x8000) >> 15);
+			cnt = (*Data & 0x7FFF);
 			Data++;
 
 			do
@@ -308,13 +310,13 @@ void picoJPG_Show(pjpeg_image_info_t image_info, int poX, int poY)
 					{
 						for (bx = 0; bx < bx_limit; bx++)
 						{
-							int R = *pSrcR++;
-							int G = *pSrcG++;
-							int B = *pSrcB++;
+//							int R = ;
+//							int G = ;
+//							int B = ;
 							NGL_GP_DrawPixel(
                                         (mcu_x * image_info.m_MCUWidth) + x + bx + poX,
                                         (mcu_y * image_info.m_MCUHeight)+ y + by + poY,
-                                        ConvertTo565Color(R, G, B)
+                                        ConvertTo565Color(*pSrcR++, *pSrcG++, *pSrcB++)
                                         );
 						}
 
@@ -366,7 +368,7 @@ void NGL_DrawImage(uint16_t X0, uint16_t Y0, const NGL_Image *Image)
 
 		status = pjpeg_decode_init(&image_info, picoJPG_need_bytes_callback, &jpeg_buffer);
 		if (!status) {
-			picoJPG_Show(image_info, 0, 0);
+			picoJPG_Show(image_info, X0, Y0);
 		}
 	}
 	else if(Image->ColorBits == 1) LCD_Draw_1bpp_IMG(Image);
@@ -377,8 +379,6 @@ void NGL_DrawImage(uint16_t X0, uint16_t Y0, const NGL_Image *Image)
     /* Set out area to fullscreen */
 	NGL_LCD_SetFullScreen();
 }
-
-
 
 
 
