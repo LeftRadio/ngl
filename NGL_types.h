@@ -30,6 +30,9 @@
 #define nMIN(a,b) (((a)<(b))?(a):(b))
 #define nMAX(a,b) (((a)>(b))?(a):(b))
 
+#define nRANGE(a,b,h) ( ((a)<((b)+(h)) && ((a)>((b)-(h))) )?(0):(-1) )
+
+
 /* Exported typedef ----------------------------------------------------------*/
 typedef enum {FALSE = 0, TRUE = !FALSE} bool;
 typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
@@ -38,16 +41,82 @@ typedef enum {RESET = 0, SET = !RESET} FlagStatus;
 
 /* --------------------------  HAL/GL elements enums & structs  -------------------------- */
 typedef void (*pEvent)(void);
-typedef enum { _0_degree, _90_degree, _180_degree, _270_degree } NGL_RotationLCD;
-typedef enum { NGL_Vertical, NGL_Horizontal } NGL_VertHoriz_Type;
-typedef enum { LCD_FSMC_Connect = 0, LCD_GPIO_Connect = 1 } NGL_HardConnectType;
-typedef enum { IN_OBJECT = 0, OUT_OBJECT = !IN_OBJECT } NGL_ClipMode;
-typedef enum { CLEAR = 0, DRAW = 1 } NGL_DrawState;
-typedef enum { Transparent = 0, NotTransparent = 1 } NGL_TransparentState;
-typedef enum { TextButton, ColorFillButton, IconButton } NGL_ButtonType;
-typedef enum { ReClick_ENABLE, ReClick_DISABLE } NGL_ReClickState;
-typedef enum { ResetButton = 0, SelectedButton = 1 } NGL_ButtonState;
-typedef enum { NGL_ClipIN, NGL_ClipOUT } NGL_ClipType;
+
+typedef enum {
+    _0_degree,
+    _90_degree,
+    _180_degree,
+    _270_degree
+} NGL_RotationLCD;
+
+typedef enum {
+    NGL_Vertical,
+    NGL_Horizontal
+} NGL_VertHoriz_Type;
+
+typedef enum {
+    LCD_FSMC_Connect = 0,
+    LCD_GPIO_Connect = 1
+} NGL_HardConnectType;
+
+
+typedef enum {
+    CLEAR = 0,
+    DRAW = 1
+} NGL_DrawState;
+
+typedef enum {
+    Transparent = 0,
+    NotTransparent = 1
+} NGL_TransparentState;
+
+typedef enum {
+    TextButton,
+    ColorFillButton,
+    IconButton
+} NGL_ButtonType;
+
+typedef enum {
+    ReClick_ENABLE,
+    ReClick_DISABLE
+} NGL_ReClickState;
+
+typedef enum {
+    ResetButton = 0,
+    SelectedButton = 1
+} NGL_ButtonState;
+
+typedef struct {
+   uint16_t x, y;
+} Coordinate;
+
+typedef struct {
+    long double An, Bn, Cn, Dn, En, Fn, Divider;
+} Matrix_Typedef;
+
+typedef enum {
+    Touch_Default,
+    Touch_AxisX_State,
+    Touch_AxisY_State,
+    Touch_Interrupt,
+    Touch_Polling,
+    Touch_Data,
+    Touch_Stop
+} NGL_TouchState;
+
+typedef enum {
+    Touch_ADC_Interface,
+    Touch_SPI_Interface
+} NGL_TouchInterface;
+
+typedef enum {
+    NGL_Touch_NoTouch,
+    NGL_Touch_SingleTouch,
+    NGL_Touch_RepeatTouch,
+} NGL_TouchType;
+
+typedef enum { NGL_Clip_IN, NGL_Clip_OUT } NGL_ClipType;
+
 
 
 /* LCD object type */
@@ -89,7 +158,6 @@ typedef struct {
 /* NGL Font type */
 typedef struct {
 	const uint8_t Height;
-//	const uint8_t HeightBytes;
 	const uint8_t FirstChar;
 	const uint8_t LastChar;
 	const uint8_t FontSpace;
@@ -184,6 +252,7 @@ typedef struct {
 /* NGL UI SeekBar type */
 typedef struct {
 	const uint16_t X0, Y0, X1, Y1;
+    const uint16_t SliderSize;
     uint16_t old_posX, old_posY;
 	const NGL_VertHoriz_Type Orientation;
 	const int16_t Level_MIN, Level_MAX;
@@ -191,6 +260,7 @@ typedef struct {
     FunctionalState ShowProgress;
 	uint16_t Color;
     uint16_t SliderColor;
+    const pEvent ClickEvent;
 } NGL_SeekBar;
 
 /* NGL UI FillBar type */
@@ -199,6 +269,7 @@ typedef struct {
     int MIN, MAX;
     int Cent;
     const int Labels[20];
+    uint8_t LabelsCount;
     char *Units;
     FunctionalState ShowLabels;
     FunctionalState ShowLines;
@@ -221,11 +292,25 @@ typedef struct {
 
 /* NGL UI page objects type */
 typedef struct {
+
     const NGL_Button **buttons;
+    uint16_t btn_count;
+
     const NGL_Label **lables;
+    uint16_t lbl_count;
+
     const NGL_FillBar **fillbars;
+    uint16_t flb_count;
+
     const NGL_SeekBar **seekbars;
+    uint16_t skb_count;
+
     const NGL_GraphScale **graphscales;
+    uint16_t grf_count;
+
+    const NGL_CheckBox **checkboxs;
+    uint16_t chxb_count;
+
 } NGL_Objects;
 
 /* NGL Pages type */
@@ -238,10 +323,54 @@ typedef struct {
 	NGL_Objects Objects;
 
 	const pEvent Draw;
-	const pEvent Click;			// Page click (or index change) function
+	const void (*Click)(Coordinate* data, NGL_TouchType type); // Page click (or index change) function
 } NGL_Page;
 
 
+
+// /* --------------------------------  TouchScreen elements structs  -------------------------------- */
+typedef int8_t (*__pv_func)(void);
+typedef int8_t (*__ppFoops)(Coordinate sc, Coordinate* ds);
+typedef int8_t (*__peFoops)(uint16_t data, NGL_TouchState state);
+
+typedef struct  {
+    const __pv_func configuration;
+    const __pv_func calibrate;
+    const __ppFoops point;
+    const __peFoops event;
+    const __pv_func reset;
+} NGL_TouchScreenFoops;
+
+typedef int8_t (*__psCallBack)(NGL_TouchState state);
+typedef int8_t (*__prCallBack)(Coordinate* samples, uint8_t len);
+typedef void (*__peCallBack)(Coordinate data, NGL_TouchType type);
+
+typedef struct  {
+    const __pv_func HAL_Init;
+    const __psCallBack HAL_SetState;
+    const __prCallBack HAL_ReadSamples;
+    const __prCallBack HAL_SaveSamples;
+    const __pv_func HAL_NoTouch;
+    const __peCallBack EventSignal;
+} NGL_TouchScreen_Callbacks;
+
+typedef struct {
+    NGL_TouchInterface Interface;
+
+    Matrix_Typedef Matrix;
+    const Coordinate calibrateSamples[3];
+    Coordinate data;
+    NGL_TouchState state;
+    uint16_t repeatDelay;
+
+    const NGL_TouchScreen_Callbacks* callbacks;
+    const NGL_TouchScreenFoops* foops;
+} NGL_TouchScreen;
+
+
+
+
+/* --------------------------------  Clip support structs  -------------------------------- */
 
 typedef struct  {
     uint16_t X_Left;

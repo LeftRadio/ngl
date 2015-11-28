@@ -108,8 +108,12 @@ void NGL_GUI_DrawCheckBox(const NGL_CheckBox* checkbox)
   * @param
   * @retval None
   */
-void NGL_GUI_CheckBoxEvent(const NGL_CheckBox* checkbox, uint8_t EventType, int* EvnentData) {
+void NGL_GUI_CheckBoxEvent(NGL_CheckBox* box, NGL_TouchType EventType, int* EvnentData) {
 
+  if (box->Checked == ENABLE) box->Checked = DISABLE;
+  else box->Checked = ENABLE;
+
+  NGL_GUI_DrawCheckBox(box);
 }
 
 

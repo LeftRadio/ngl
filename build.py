@@ -70,7 +70,7 @@ def build_otions():
         '-Wall',
         '-ffunction-sections',
         '-g',
-        '-O0',
+        '-O3',
         '-c',
         '-D__FPU_USED']
 
@@ -86,7 +86,8 @@ def includes():
         '.\\Colors',
         '.\\Primitives',
         '.\\Font',
-        '.\\GUI']
+        '.\\GUI',
+        '.\\TouchScreen']
 
     return ['-I%s' % os.path.abspath(inc) for inc in include_dirs]
 
@@ -111,7 +112,7 @@ def sources():
         '.\\Font\\Font.c',
 
         '.\\Bitmaps\\bitmap.c',
-        '.\\Bitmaps\\picojpeg.c',
+        # '.\\Bitmaps\\picojpeg.c',
 
         '.\\Primitives\\Graphics_Primitive.c',
         '.\\Primitives\\traingle.c',
@@ -124,7 +125,10 @@ def sources():
         '.\\GUI\\Objects\\fillbar.c',
         '.\\GUI\\Objects\\graphscale.c',
         '.\\GUI\\Objects\\seekbar.c',
-        '.\\GUI\\Objects\\checkbox.c']
+        '.\\GUI\\Objects\\checkbox.c',
+
+        '.\\TouchScreen\\NGL_Touch.c',
+        '.\\TouchScreen\\NGL_Touch_Events.c']
 
     return [os.path.abspath(f) for f in files]
 

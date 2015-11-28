@@ -27,7 +27,7 @@
   * @param
   * @retval None
   */
-void NGL_GUI_Drawbar(const NGL_FillBar* FillBar)
+void NGL_GUI_DrawFillBar(const NGL_FillBar* FillBar)
 {
     NGL_FillBar* bar = (NGL_FillBar*)FillBar;
 
@@ -58,11 +58,22 @@ void NGL_GUI_Drawbar(const NGL_FillBar* FillBar)
         // if new X1 > old X1
         if(fX1 > bar->sfX1) {
             fX0 = bar->sfX1;
+
+            // store new X/Y (for Horz/Vert respect) level coords
+            bar->sfX1 = fX1;
+            bar->sfY1 = fY1;
+
             color = bar->Color;
+
         }
         else { // else if new X1 < old X1
             fX0 = fX1;
             fX1 = bar->sfX1;
+
+            // store new X/Y (for Horz/Vert respect) level coords
+            bar->sfX1 = fX0;
+            bar->sfY1 = fY0;
+
             color = NGL_Color_GetBackColor();
         }
     }
@@ -103,10 +114,6 @@ void NGL_GUI_Drawbar(const NGL_FillBar* FillBar)
             NGL_GP_DrawLine(bar->X0, bar->Y1, bar->X1, bar->Y1, bar->MarkersColor);
         }
     }
-
-    // store new X/Y (for Horz/Vert respect) level coords
-    bar->sfX1 = fX1;
-    bar->sfY1 = fY1;
 }
 
 

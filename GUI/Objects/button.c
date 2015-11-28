@@ -30,7 +30,7 @@
   * @param  *Button, PushState
   * @retval None
   */
-void _drawSimpleButton(const NGL_Button *Button, NGL_ButtonState PushState)
+void _drawSimpleButton(const NGL_Button* Button)
 {
     uint16_t i, j;
     uint16_t Color;
@@ -45,6 +45,7 @@ void _drawSimpleButton(const NGL_Button *Button, NGL_ButtonState PushState)
     uint16_t Y1 = (Y0 + Button->Height);
 
     /* If button is pressed */
+    NGL_ButtonState PushState = ResetButton;
     if(PushState == SelectedButton) {
         Color = Button->SelectedColor;
     }
@@ -63,8 +64,8 @@ void _drawSimpleButton(const NGL_Button *Button, NGL_ButtonState PushState)
         G = (uint8_t)((Color >> 5) & 0x3F);
         B = (uint8_t)(Color & 0x1F);
 
-        cmax = nMAX( nMAX(R, G>>1), B );
-        colorShiftPixels = (Y1 - Y0) / cmax;
+        cmax = 32 - nMAX( nMAX(R, G>>1), B );
+        colorShiftPixels = (cmax + (Y1 - Y0)) / cmax;
 
         for(i = 0; i < (Y1 - Y0); i += colorShiftPixels)
         {
@@ -103,7 +104,7 @@ void _drawSimpleButton(const NGL_Button *Button, NGL_ButtonState PushState)
     X0 = Button->X + ((Button->Width - tmpText_X) / 2);
     Y0 = Button->Y + ((Button->Height - Button->Font->Height) / 2) + Button->TextOffset_Y;
 
-    NGL_Font_DrawFastString(X0, Y0 - 2, NotTransparent, Button->Text);
+    NGL_Font_DrawFastString(X0, Y0 - 2, Transparent, Button->Text);
 }
 
 
@@ -112,7 +113,7 @@ void _drawSimpleButton(const NGL_Button *Button, NGL_ButtonState PushState)
   * @param
   * @retval None
   */
-void NGL_GUI_DrawButton(const NGL_Button *Button, NGL_ButtonState pushState)
+void NGL_GUI_DrawButton(const NGL_Button* Button)
 {
     uint16_t btnTextWidth;
     uint16_t txt_X;
@@ -135,16 +136,24 @@ void NGL_GUI_DrawButton(const NGL_Button *Button, NGL_ButtonState pushState)
             btnTextWidth = NGL_Font_MeasureStringWidth((NGL_Font*)Button->Font, (char*)Button->Text);
             txt_X = Button->X + ((Button->Width - btnTextWidth) / 2);
 
-            NGL_Font_DrawFastString(txt_X, Button->Y + Button->TextOffset_Y, NotTransparent, (char*)Button->Text);
+            NGL_Font_DrawFastString(txt_X, Button->Y + Button->TextOffset_Y, Transparent, (char*)Button->Text);
         }
     }
     else
     {
-        _drawSimpleButton(Button, pushState);
+        _drawSimpleButton(Button);
     }
 }
 
 
+/**
+  * @brief  NGL_GUI_CheckBoxEvent
+  * @param
+  * @retval None
+  */
+void NGL_GUI_ButtonEvent(NGL_Button* button, NGL_TouchType eventType, int* evnentData) {
+
+}
 
 /*********************************************************************************************************
       END FILE

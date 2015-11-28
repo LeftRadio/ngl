@@ -103,9 +103,8 @@ static void drawHorizontal(const NGL_GraphScale* gScale)
     }
 
     // labels positions
-    for (i = 0; i < 20; i++) {
-    	if(gScale->Labels[i] == 0) break;
-        lblpos[i] = calcPos(gScale, gScale->Labels[i]);
+    for (i = 0; i < gScale->LabelsCount; i++) {
+    	lblpos[i] = calcPos(gScale, gScale->Labels[i]);
     }
 
     // lines
@@ -121,7 +120,7 @@ static void drawHorizontal(const NGL_GraphScale* gScale)
         }
 
         // label cent lines
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < gScale->LabelsCount; i++) {
             NGL_GP_DrawLine(lblpos[i], y0, lblpos[i], y11, gScale->Color);
         }
     }
@@ -132,14 +131,15 @@ static void drawHorizontal(const NGL_GraphScale* gScale)
         NGL_Color_SetTextColor(gScale->Color);
         NGL_Font_SetFont(gScale->Font);
 
-        for (i = 0; i < 20; i++) {
-
-        	if(lblpos[i] == INT_MAX) break;
+        for (i = 0; i < gScale->LabelsCount; i++) {
 
         	sprintf(lbl, "%d", gScale->Labels[i]);
 
             lbl_width = NGL_Font_MeasureStringWidth(gScale->Font, lbl);
             lblpos_t = lblpos[i] - (lbl_width >> 1);
+            lblpos_t = nMAX(lblpos_t, gScale->X0);
+            lblpos_t = nMIN(lblpos_t, gScale->X1 - lbl_width);
+
             if(gScale->Labels[i] < 0) {
             	lblpos_t -= NGL_Font_MeasureStringWidth(gScale->Font, "-") + gScale->Font->FontSpace;
             }

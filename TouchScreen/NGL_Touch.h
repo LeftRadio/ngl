@@ -1,28 +1,31 @@
 /**
   ******************************************************************************
-  * @file       page.h
-  * @author     LeftRadio
-  * @version    V1.0.0
+  * @file	 	UI_touch.h
+  * @author  	Neil Lab :: Left Radio
+  * @version 	v1.0.0
   * @date
-  * @brief
+  * @brief		header
   ******************************************************************************
 **/
 
-#ifndef __GUI_PAGE_H
-#define __GUI_PAGE_H
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __UI_TOUCH_H
+#define __UI_TOUCH_H
 
 /* Includes ------------------------------------------------------------------*/
-/* Exported typedef -----------------------------------------------------------*/
+#include "NGL_types.h"
+
 /* Exported define -----------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported typedef ----------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
-/* Exported function --------------------------------------------------------*/
-void NGL_GUI_SelectPage(const NGL_Page *page);
-NGL_Page* NGL_GUI_GetSelectedPage(void);
-void NGL_GUI_DrawPageObjects(void);
-int NGL_GUI_ClickPage(Coordinate point, NGL_TouchType type);
+/* Exported function ---------------------------------------------------------*/
+void NGL_Touch_InitFoops(NGL_TouchScreen* touch);
+NGL_TouchScreen* NGL_Touch_getTouch(void);
 
 
-#endif /* __GUI_PAGE_H */
+
+#endif /* __UI_TOUCH_H */
 /*********************************************************************************************************
       END FILE
 *********************************************************************************************************/

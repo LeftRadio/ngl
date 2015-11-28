@@ -286,7 +286,7 @@ ErrorStatus NGL_GP_ClipNewObject(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t
 			ClipObjects[i].Type = clipType;
 			ClipObjects[i].State = ENABLE;
 
-			if(clipType == NGL_ClipIN) ClipObjects[i].pClipLine = CS_ClipLine_IN_Window;
+			if(clipType == NGL_Clip_IN) ClipObjects[i].pClipLine = CS_ClipLine_IN_Window;
 			else ClipObjects[i].pClipLine = CS_ClipLine_Out_Window;
 
 			NumOfActiveClipObjects++;

@@ -11,7 +11,7 @@
 /* Includes -----------------------------------------------------------------*/
 #include <string.h>
 #include "NGL_types.h"
-#include "page.h"
+#include "colors.h"
 #include "font.h"
 
 
@@ -63,7 +63,7 @@ void NGL_GUI_UpdateLabel(const NGL_Label *Label, char *NewText)
               Label->Text,
               i,
               TextLenght - i,
-              NGL_GUI_SelectedPage->BackColor);
+              NGL_Color_GetBackColor());
 
             /* Draw from i to strlen(NewText) - i */
             NGL_Font_DrawCropString(
