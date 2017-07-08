@@ -30,15 +30,14 @@ static int8_t __setCalibrationMatrix(Coordinate *screenPtr);
 static void __drawCross(uint16_t Xpos, uint16_t Ypos, uint8_t Size, uint16_t Color);
 
 /* Private variables ---------------------------------------------------------*/
-
 NGL_TouchScreen* _touch = (void*)0;
-
 /* */
 const NGL_TouchScreenFoops _touchFoops = {
 	_touchConfiguration,
 	_touchCalibrate,
 	_touchPoint,
 	NGL_Touch_Event,
+	NGL_Touch_DoTouch,
 	_touchReset
 };
 
@@ -46,12 +45,77 @@ const NGL_TouchScreenFoops _touchFoops = {
 /* Private functions ---------------------------------------------------------*/
 
 /**
+ * @brief  __setCalibrationMatrix
+ * @param  None
+ * @retval None
+ */
+static int8_t __setCalibrationMatrix(Coordinate *ptr) {
+
+	const Coordinate *displayPtr = _touch->calibrateSamples;
+	Matrix_Typedef *matrix = &_touch->Matrix;
+
+	matrix->Divider = ((ptr[0].x - ptr[2].x) * (ptr[1].y - ptr[2].y)) -
+			((ptr[1].x - ptr[2].x) * (ptr[0].y - ptr[2].y)) ;
+
+	if( _touch == (void*)0 || matrix->Divider == 0 ) {
+		return -1;
+	}
+
+	matrix->An = ((displayPtr[0].x - displayPtr[2].x) * (ptr[1].y - ptr[2].y)) -
+			((displayPtr[1].x - displayPtr[2].x) * (ptr[0].y - ptr[2].y)) ;
+
+	matrix->Bn = ((ptr[0].x - ptr[2].x) * (displayPtr[1].x - displayPtr[2].x)) -
+			((displayPtr[0].x - displayPtr[2].x) * (ptr[1].x - ptr[2].x)) ;
+
+	matrix->Cn = (((ptr[2].x * displayPtr[1].x) - (ptr[1].x * displayPtr[2].x)) * ptr[0].y) +
+			(((ptr[0].x * displayPtr[2].x) - (ptr[2].x * displayPtr[0].x)) * ptr[1].y) +
+			(((ptr[1].x * displayPtr[0].x) - (ptr[0].x * displayPtr[1].x)) * ptr[2].y) ;
+
+	matrix->Dn = ((displayPtr[0].y - displayPtr[2].y) * (ptr[1].y - ptr[2].y)) -
+			((displayPtr[1].y - displayPtr[2].y) * (ptr[0].y - ptr[2].y)) ;
+
+	matrix->En = ((ptr[0].x - ptr[2].x) * (displayPtr[1].y - displayPtr[2].y)) -
+			((displayPtr[0].y - displayPtr[2].y) * (ptr[1].x - ptr[2].x)) ;
+
+	matrix->Fn = (((ptr[2].x * displayPtr[1].y) - (ptr[1].x * displayPtr[2].y)) * ptr[0].y) +
+			(((ptr[0].x * displayPtr[2].y) - (ptr[2].x * displayPtr[0].y)) * ptr[1].y) +
+			(((ptr[1].x * displayPtr[0].y) - (ptr[0].x * displayPtr[1].y)) * ptr[2].y) ;
+
+	return 0;
+}
+
+/**
+ * @brief  __drawCross
+ * @param  None
+ * @retval None
+ */
+static void __drawCross(uint16_t Xpos, uint16_t Ypos, uint8_t size, uint16_t Color) {
+	uint8_t SizeDiv2 = size >> 1;
+
+	NGL_GP_DrawLine(Xpos - size, Ypos, Xpos - 2, Ypos, Color);
+	NGL_GP_DrawLine(Xpos + 2, Ypos, Xpos + size, Ypos, Color);
+	NGL_GP_DrawLine(Xpos, Ypos - size, Xpos, Ypos - 2, Color);
+	NGL_GP_DrawLine(Xpos, Ypos + 2, Xpos, Ypos + size, Color);
+
+	NGL_GP_DrawLine(Xpos - size, Ypos + size, Xpos - SizeDiv2, Ypos + size, Color);
+	NGL_GP_DrawLine(Xpos - size, Ypos + SizeDiv2, Xpos - size, Ypos + size, Color);
+
+	NGL_GP_DrawLine(Xpos - size, Ypos - size, Xpos - SizeDiv2, Ypos - size, Color);
+	NGL_GP_DrawLine(Xpos - size, Ypos - size, Xpos - size, Ypos - SizeDiv2, Color);
+
+	NGL_GP_DrawLine(Xpos + SizeDiv2, Ypos + size, Xpos + size, Ypos + size, Color);
+	NGL_GP_DrawLine(Xpos + size, Ypos + SizeDiv2, Xpos + size, Ypos + size, Color);
+
+	NGL_GP_DrawLine(Xpos + SizeDiv2, Ypos - size, Xpos + size, Ypos - size, Color);
+	NGL_GP_DrawLine(Xpos + size, Ypos - size, Xpos + size, Ypos - SizeDiv2, Color);
+}
+
+/**
  * @brief  NGL_Touch_InitFoops
  * @param  None
  * @retval None
  */
-void NGL_Touch_InitFoops(NGL_TouchScreen* touch)
-{
+void NGL_Touch_InitFoops(NGL_TouchScreen* touch) {
 	_touch = touch;
 	_touch->foops = &_touchFoops;
 }
@@ -61,8 +125,7 @@ void NGL_Touch_InitFoops(NGL_TouchScreen* touch)
  * @param  None
  * @retval None
  */
-NGL_TouchScreen* NGL_Touch_getTouch(void)
-{
+NGL_TouchScreen* NGL_Touch_getTouch(void) {
 	return _touch;
 }
 
@@ -71,16 +134,14 @@ NGL_TouchScreen* NGL_Touch_getTouch(void)
  * @param  None
  * @retval None
  */
-static int8_t _touchConfiguration(void)
-{
+static int8_t _touchConfiguration(void) {
+	/* */
 	int8_t status = -1;
 	Coordinate samples[3];
-
 	/* Init HAL level, GPIO, EXTI, ADC, SPI etc. */
 	if ((_touch != (void*)0) && (_touch->callbacks->HAL_Init() == 0)) {
 
 		if (_touch->callbacks->HAL_SetState(Touch_Default) == 0) {
-
 			/* read calibrate samples */
 			if (_touch->callbacks->HAL_ReadSamples(samples, 3) == 0) {
 				/* touch is calibrated, set matrix */
@@ -92,7 +153,6 @@ static int8_t _touchConfiguration(void)
 			}
 		}
 	}
-
 	return status;
 }
 
@@ -101,8 +161,7 @@ static int8_t _touchConfiguration(void)
  * @param  None
  * @retval None
  */
-static int8_t _touchCalibrate(void)
-{
+static int8_t _touchCalibrate(void) {
 	uint8_t size = LCD->X_Max / 32;
 	uint8_t i = 0, verify_cnt = 5;
 	Coordinate samples[4];
@@ -201,28 +260,25 @@ static int8_t _touchCalibrate(void)
  * @param  None
  * @retval None
  */
-static int8_t _touchPoint(Coordinate sc, Coordinate* ds)
-{
-	if(_touch != (void*)0) {
-
-		Matrix_Typedef m = _touch->Matrix;
-
-		if( m.Divider != 0 ) {
-			/* XD = AX+BY+C */
-			ds->x = ( (m.An * sc.x) + (m.Bn * sc.y) + m.Cn ) / m.Divider ;
-
-			/* YD = DX+EY+F */
-			ds->y = ( (m.Dn * sc.x) + (m.En * sc.y) + m.Fn ) / m.Divider ;
-		}
-		else {
-			ds->x = sc.x;
-			ds->y = sc.y;
-		}
-
-		return 0;
+static int8_t _touchPoint(Coordinate sc, Coordinate* ds) {
+	/* */
+	if(_touch == (void*)0) {
+		return -1;
 	}
-
-	return -1;
+	/* */
+	Matrix_Typedef m = _touch->Matrix;
+	/* */
+	if( m.Divider != 0 ) {
+		/* XD = AX+BY+C */
+		ds->x = ( (m.An * sc.x) + (m.Bn * sc.y) + m.Cn ) / m.Divider ;
+		/* YD = DX+EY+F */
+		ds->y = ( (m.Dn * sc.x) + (m.En * sc.y) + m.Fn ) / m.Divider ;
+	}
+	else {
+		ds->x = sc.x;
+		ds->y = sc.y;
+	}
+	return 0;
 }
 
 /**
@@ -230,96 +286,11 @@ static int8_t _touchPoint(Coordinate sc, Coordinate* ds)
  * @param  None
  * @retval None
  */
-static int8_t _touchReset(void)
-{
+static int8_t _touchReset(void) {
 	return 0;
 }
 
-/**
- * @brief  __setCalibrationMatrix
- * @param  None
- * @retval None
- */
-static int8_t __setCalibrationMatrix(Coordinate *screenPtr)
-{
-	const Coordinate *displayPtr = _touch->calibrateSamples;
-	Matrix_Typedef *matrix = &_touch->Matrix;
 
-	if(_touch != (void*)0) {
-
-		matrix->Divider = ((screenPtr[0].x - screenPtr[2].x) * (screenPtr[1].y - screenPtr[2].y)) -
-				((screenPtr[1].x - screenPtr[2].x) * (screenPtr[0].y - screenPtr[2].y)) ;
-
-		if( matrix->Divider != 0 )
-		{
-			matrix->An = ((displayPtr[0].x - displayPtr[2].x) * (screenPtr[1].y - screenPtr[2].y)) -
-					((displayPtr[1].x - displayPtr[2].x) * (screenPtr[0].y - screenPtr[2].y)) ;
-
-			matrix->Bn = ((screenPtr[0].x - screenPtr[2].x) * (displayPtr[1].x - displayPtr[2].x)) -
-					((displayPtr[0].x - displayPtr[2].x) * (screenPtr[1].x - screenPtr[2].x)) ;
-
-			matrix->Cn = (((screenPtr[2].x * displayPtr[1].x) - (screenPtr[1].x * displayPtr[2].x)) * screenPtr[0].y) +
-					(((screenPtr[0].x * displayPtr[2].x) - (screenPtr[2].x * displayPtr[0].x)) * screenPtr[1].y) +
-					(((screenPtr[1].x * displayPtr[0].x) - (screenPtr[0].x * displayPtr[1].x)) * screenPtr[2].y) ;
-
-			matrix->Dn = ((displayPtr[0].y - displayPtr[2].y) * (screenPtr[1].y - screenPtr[2].y)) -
-					((displayPtr[1].y - displayPtr[2].y) * (screenPtr[0].y - screenPtr[2].y)) ;
-
-			matrix->En = ((screenPtr[0].x - screenPtr[2].x) * (displayPtr[1].y - displayPtr[2].y)) -
-					((displayPtr[0].y - displayPtr[2].y) * (screenPtr[1].x - screenPtr[2].x)) ;
-
-			matrix->Fn = (((screenPtr[2].x * displayPtr[1].y) - (screenPtr[1].x * displayPtr[2].y)) * screenPtr[0].y) +
-					(((screenPtr[0].x * displayPtr[2].y) - (screenPtr[2].x * displayPtr[0].y)) * screenPtr[1].y) +
-					(((screenPtr[1].x * displayPtr[0].y) - (screenPtr[0].x * displayPtr[1].y)) * screenPtr[2].y) ;
-
-			return 0;
-		}
-	}
-
-	return -1;
-}
-
-/**
- * @brief  __drawCross
- * @param  None
- * @retval None
- */
-static void __drawCross(uint16_t Xpos, uint16_t Ypos, uint8_t size, uint16_t Color)
-{
-	uint8_t SizeDiv2 = size >> 1;
-
-	NGL_GP_DrawLine(Xpos - size, Ypos, Xpos - 2, Ypos, Color);
-	NGL_GP_DrawLine(Xpos + 2, Ypos, Xpos + size, Ypos, Color);
-	NGL_GP_DrawLine(Xpos, Ypos - size, Xpos, Ypos - 2, Color);
-	NGL_GP_DrawLine(Xpos, Ypos + 2, Xpos, Ypos + size, Color);
-
-	NGL_GP_DrawLine(Xpos - size, Ypos + size, Xpos - SizeDiv2, Ypos + size, Color);
-	NGL_GP_DrawLine(Xpos - size, Ypos + SizeDiv2, Xpos - size, Ypos + size, Color);
-
-	NGL_GP_DrawLine(Xpos - size, Ypos - size, Xpos - SizeDiv2, Ypos - size, Color);
-	NGL_GP_DrawLine(Xpos - size, Ypos - size, Xpos - size, Ypos - SizeDiv2, Color);
-
-	NGL_GP_DrawLine(Xpos + SizeDiv2, Ypos + size, Xpos + size, Ypos + size, Color);
-	NGL_GP_DrawLine(Xpos + size, Ypos + SizeDiv2, Xpos + size, Ypos + size, Color);
-
-	NGL_GP_DrawLine(Xpos + SizeDiv2, Ypos - size, Xpos + size, Ypos - size, Color);
-	NGL_GP_DrawLine(Xpos + size, Ypos - size, Xpos + size, Ypos - SizeDiv2, Color);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*********************************************************************************************************
+/*******************************************************************************
       END FILE
-*********************************************************************************************************/
+*******************************************************************************/

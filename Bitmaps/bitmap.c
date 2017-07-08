@@ -16,7 +16,7 @@
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
 #include "Graphics_Primitive.h"
-#include "picojpeg.h"
+// #include "picojpeg.h"
 #include "colors.h"
 
 
@@ -209,136 +209,133 @@ static void LCD_Draw_16bpp_IMG(const NGL_Image *Bitmap)
 }
 
 
-/**
-  * @brief  picoJPG_need_bytes_callback
-  * @param
-  * @retval None
-  */
-unsigned char picoJPG_need_bytes_callback(unsigned char* pBuf, unsigned char buf_size, unsigned char *pBytes_actually_read, void *pCallback_data)
-{
-	uint32_t n;
-	jpeg_buffer_t *jpeg_buffer = (jpeg_buffer_t*)pCallback_data;
+// /**
+//   * @brief  picoJPG_need_bytes_callback
+//   * @param
+//   * @retval None
+//   */
+// unsigned char picoJPG_need_bytes_callback(unsigned char* pBuf, unsigned char buf_size, unsigned char *pBytes_actually_read, void *pCallback_data)
+// {
+// 	uint32_t n;
+// 	jpeg_buffer_t *jpeg_buffer = (jpeg_buffer_t*)pCallback_data;
 
-	n = MIN(jpeg_buffer->length - jpeg_buffer->position, buf_size);
-	memcpy(pBuf, jpeg_buffer->buffer + jpeg_buffer->position, n);
-	*pBytes_actually_read = n;
+// 	n = MIN(jpeg_buffer->length - jpeg_buffer->position, buf_size);
+// 	memcpy(pBuf, jpeg_buffer->buffer + jpeg_buffer->position, n);
+// 	*pBytes_actually_read = n;
 
-	jpeg_buffer->position += n;
+// 	jpeg_buffer->position += n;
 
-	return 0;
-}
+// 	return 0;
+// }
 
 
-/**
-  * @brief  picoJPG_Show
-  * @param
-  * @retval None
-  */
-void picoJPG_Show(pjpeg_image_info_t image_info, int poX, int poY)
-{
-	unsigned char status;
-	//pjpeg_image_info_t image_info;
-	int mcu_x = 0;
-	int mcu_y = 0;
-	uint32_t row_pitch;
-	uint32_t decoded_width;
-//	uint32_t decoded_height;
-//	uint32_t row_blocks_per_mcu, col_blocks_per_mcu;
+// /**
+//   * @brief  picoJPG_Show
+//   * @param
+//   * @retval None
+//   */
+// void picoJPG_Show(pjpeg_image_info_t image_info, int poX, int poY)
+// {
+// 	unsigned char status;
+// 	//pjpeg_image_info_t image_info;
+// 	int mcu_x = 0;
+// 	int mcu_y = 0;
+// 	uint32_t row_pitch;
+// 	uint32_t decoded_width;
+//     //	uint32_t decoded_height;
+//     //	uint32_t row_blocks_per_mcu, col_blocks_per_mcu;
 
-	decoded_width = image_info.m_width;
-//	decoded_height = image_info.m_height;
+// 	decoded_width = image_info.m_width;
+//     //	decoded_height = image_info.m_height;
 
-	row_pitch = decoded_width * image_info.m_comps;
+// 	row_pitch = decoded_width * image_info.m_comps;
 
-//	row_blocks_per_mcu = image_info.m_MCUWidth >> 3;
-//	col_blocks_per_mcu = image_info.m_MCUHeight >> 3;
+//     //	row_blocks_per_mcu = image_info.m_MCUWidth >> 3;
+//     //	col_blocks_per_mcu = image_info.m_MCUHeight >> 3;
 
-	for (;;)
-	{
-		int y, x;
-		uint8 *pDst_row;
+// 	for (;;)
+// 	{
+// 		int y, x;
+// 		uint8 *pDst_row;
 
-		status = pjpeg_decode_mcu();
+// 		status = pjpeg_decode_mcu();
 
-		if (status)
-		{
-			if (status != PJPG_NO_MORE_BLOCKS)
-			{
-				return;
-			}
+// 		if (status)
+// 		{
+// 			if (status != PJPG_NO_MORE_BLOCKS)
+// 			{
+// 				return;
+// 			}
 
-			break;
-		}
+// 			break;
+// 		}
 
-		if (mcu_y >= image_info.m_MCUSPerCol)
-		{
-			return;
-		}
+// 		if (mcu_y >= image_info.m_MCUSPerCol)
+// 		{
+// 			return;
+// 		}
 
-		for (y = 0; y < image_info.m_MCUHeight; y += 8)
-		{
-			const int by_limit = MIN(8, image_info.m_height - (mcu_y * image_info.m_MCUHeight + y));
+// 		for (y = 0; y < image_info.m_MCUHeight; y += 8)
+// 		{
+// 			const int by_limit = MIN(8, image_info.m_height - (mcu_y * image_info.m_MCUHeight + y));
 
-			for (x = 0; x < image_info.m_MCUWidth; x += 8)
-			{
-				// Compute source byte offset of the block in the decoder's MCU buffer.
-				uint32_t src_ofs = (x * 8U) + (y * 16U);
-				const uint8 *pSrcR = image_info.m_pMCUBufR + src_ofs;
-				const uint8 *pSrcG = image_info.m_pMCUBufG + src_ofs;
-				const uint8 *pSrcB = image_info.m_pMCUBufB + src_ofs;
+// 			for (x = 0; x < image_info.m_MCUWidth; x += 8)
+// 			{
+// 				// Compute source byte offset of the block in the decoder's MCU buffer.
+// 				uint32_t src_ofs = (x * 8U) + (y * 16U);
+// 				const uint8 *pSrcR = image_info.m_pMCUBufR + src_ofs;
+// 				const uint8 *pSrcG = image_info.m_pMCUBufG + src_ofs;
+// 				const uint8 *pSrcB = image_info.m_pMCUBufB + src_ofs;
 
-				const int bx_limit = MIN(8, image_info.m_width - (mcu_x * image_info.m_MCUWidth + x));
+// 				const int bx_limit = MIN(8, image_info.m_width - (mcu_x * image_info.m_MCUWidth + x));
 
-				if (image_info.m_scanType == PJPG_GRAYSCALE)
-				{
-					int bx, by;
-					for (by = 0; by < by_limit; by++)
-					{
-						for (bx = 0; bx < bx_limit; bx++)
-						{
-							int Gr = *pSrcR++;
-							NGL_GP_DrawPixel((mcu_x * image_info.m_MCUWidth) + x + bx + poX, (mcu_y * image_info.m_MCUHeight)+ y + by + poY, ConvertTo565Color(Gr, Gr, Gr));
-						}
+// 				if (image_info.m_scanType == PJPG_GRAYSCALE)
+// 				{
+// 					int bx, by;
+// 					for (by = 0; by < by_limit; by++)
+// 					{
+// 						for (bx = 0; bx < bx_limit; bx++)
+// 						{
+// 							int Gr = *pSrcR++;
+// 							NGL_GP_DrawPixel((mcu_x * image_info.m_MCUWidth) + x + bx + poX, (mcu_y * image_info.m_MCUHeight)+ y + by + poY, ConvertTo565Color(Gr, Gr, Gr));
+// 						}
 
-						pSrcR += (8 - bx_limit);
-					}
-				}
-				else
-				{
-					int bx, by;
-					for (by = 0; by < by_limit; by++)
-					{
-						for (bx = 0; bx < bx_limit; bx++)
-						{
-//							int R = ;
-//							int G = ;
-//							int B = ;
-							NGL_GP_DrawPixel(
-                                        (mcu_x * image_info.m_MCUWidth) + x + bx + poX,
-                                        (mcu_y * image_info.m_MCUHeight)+ y + by + poY,
-                                        ConvertTo565Color(*pSrcR++, *pSrcG++, *pSrcB++)
-                                        );
-						}
+// 						pSrcR += (8 - bx_limit);
+// 					}
+// 				}
+// 				else
+// 				{
+// 					int bx, by;
+// 					for (by = 0; by < by_limit; by++)
+// 					{
+// 						for (bx = 0; bx < bx_limit; bx++)
+// 						{
+// 							NGL_GP_DrawPixel(
+//                                         (mcu_x * image_info.m_MCUWidth) + x + bx + poX,
+//                                         (mcu_y * image_info.m_MCUHeight)+ y + by + poY,
+//                                         ConvertTo565Color(*pSrcR++, *pSrcG++, *pSrcB++)
+//                                         );
+// 						}
 
-						pSrcR += (8 - bx_limit);
-						pSrcG += (8 - bx_limit);
-						pSrcB += (8 - bx_limit);
-					}
-				}
-			}
+// 						pSrcR += (8 - bx_limit);
+// 						pSrcG += (8 - bx_limit);
+// 						pSrcB += (8 - bx_limit);
+// 					}
+// 				}
+// 			}
 
-			pDst_row += (row_pitch * 8);
-		}
+// 			pDst_row += (row_pitch * 8);
+// 		}
 
-		mcu_x++;
-		if (mcu_x == image_info.m_MCUSPerRow)
-		{
-			mcu_x = 0;
-			mcu_y++;
-		}
-	}
+// 		mcu_x++;
+// 		if (mcu_x == image_info.m_MCUSPerRow)
+// 		{
+// 			mcu_x = 0;
+// 			mcu_y++;
+// 		}
+// 	}
 
-}
+// }
 
 
 /**
@@ -356,22 +353,22 @@ void NGL_DrawImage(uint16_t X0, uint16_t Y0, const NGL_Image *Image)
 	LCD->SetCursor(X0, Y0);
 
     /* Draw */
-	if(Image->Compressed == BITMAP_COMPRESS_picoJPG)
-	{
-		jpeg_buffer_t jpeg_buffer;
-		unsigned char status;
-		pjpeg_image_info_t image_info;
+	// if(Image->Compressed == BITMAP_COMPRESS_picoJPG)
+	// {
+	// 	jpeg_buffer_t jpeg_buffer;
+	// 	unsigned char status;
+	// 	pjpeg_image_info_t image_info;
 
-		memset(&jpeg_buffer, 0, sizeof(jpeg_buffer_t));
-		jpeg_buffer.buffer = (uint8_t*)Image->Data;
-		jpeg_buffer.length = Image->DataArraySize;
+	// 	memset(&jpeg_buffer, 0, sizeof(jpeg_buffer_t));
+	// 	jpeg_buffer.buffer = (uint8_t*)Image->Data;
+	// 	jpeg_buffer.length = Image->DataArraySize;
 
-		status = pjpeg_decode_init(&image_info, picoJPG_need_bytes_callback, &jpeg_buffer);
-		if (!status) {
-			picoJPG_Show(image_info, X0, Y0);
-		}
-	}
-	else if(Image->ColorBits == 1) LCD_Draw_1bpp_IMG(Image);
+	// 	status = pjpeg_decode_init(&image_info, picoJPG_need_bytes_callback, &jpeg_buffer);
+	// 	if (!status) {
+	// 		picoJPG_Show(image_info, X0, Y0);
+	// 	}
+	// }
+	if(Image->ColorBits == 1) LCD_Draw_1bpp_IMG(Image);
 	else if(Image->ColorBits == 8) LCD_Draw_8bpp_IMG(Image);
 	else if(Image->ColorBits == 16) LCD_Draw_16bpp_IMG(Image);
 	CS_LCD_clr;

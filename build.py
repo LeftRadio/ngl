@@ -72,7 +72,7 @@ def build_otions():
         '-g',
         '-O3',
         '-c',
-        '-D__FPU_USED']
+        '-D__FPU_USED', ]
 
 # ------------------------------------------------------------------------------
 # includes
@@ -112,7 +112,7 @@ def sources():
         '.\\Font\\Font.c',
 
         '.\\Bitmaps\\bitmap.c',
-        # '.\\Bitmaps\\picojpeg.c',
+        '.\\Bitmaps\\picojpeg.c',
 
         '.\\Primitives\\Graphics_Primitive.c',
         '.\\Primitives\\traingle.c',
@@ -194,9 +194,9 @@ def createArgParser():
                             metavar = '[Path]',
                             help = 'Path for output *.a library file' )
 
-    parser.add_argument( '-v', '--verbose', action='store_true', default = False,
+    parser.add_argument( '-v', '--verbose', action='store_true', default = True,
                             help = ('increase output verbosity '
-                                    '[default: False]') )
+                                    '[default: True]') )
     return parser
 
 # ------------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 **/
 
 /* Includes ------------------------------------------------------------------*/
+#include "NGL.h"
 #include "NGL_Types.h"
 #include "NGL_Touch.h"
 #include "NGL_Touch_Events.h"
@@ -18,7 +19,10 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-int8_t touch_event_status = -1;
+volatile int8_t touch_event_status = -1;
+
+volatile Coordinate _event_touchPoint;
+volatile NGL_TouchType _event_touchType;
 
 /* Exported function ---------------------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -28,10 +32,8 @@ int8_t touch_event_status = -1;
  * @param  None
  * @retval None
  */
-static __inline int8_t _touch_adc_event( NGL_TouchScreen* touch,
-                                uint16_t data,
-                                NGL_TouchState state )
-{
+static __inline int8_t _touch_adc_event(NGL_TouchScreen* touch, uint16_t data, NGL_TouchState state) {
+
   int8_t status = -1;
 
   if((state == Touch_Interrupt) || (state == Touch_Default)) {
@@ -56,7 +58,6 @@ static __inline int8_t _touch_adc_event( NGL_TouchScreen* touch,
       status = 1;
     }
   }
-
   return status;
 }
 
@@ -65,10 +66,7 @@ static __inline int8_t _touch_adc_event( NGL_TouchScreen* touch,
  * @param  None
  * @retval None
  */
-static __inline int8_t _touch_spi_event( NGL_TouchScreen* touch,
-                                         uint16_t data,
-                                         NGL_TouchState state)
-{
+static __inline int8_t _touch_spi_event( NGL_TouchScreen* touch, uint16_t data, NGL_TouchState state) {
   return 0;
 }
 
@@ -124,8 +122,7 @@ static __inline int8_t _touch_filter(Coordinate* pnt, bool Reset)
  * @param  None
  * @retval None
  */
-static __inline int8_t _touch_hp_filter(Coordinate* pnt, bool Reset)
-{
+static __inline int8_t _touch_hp_filter(Coordinate* pnt, bool Reset) {
   int8_t status = -1;
   static Coordinate old_pnt = {UINT_LEAST16_MAX, UINT_LEAST16_MAX};
 
@@ -150,18 +147,56 @@ static __inline int8_t _touch_hp_filter(Coordinate* pnt, bool Reset)
       old_pnt.y = pnt->y;
     }
   }
-
   return status;
 }
 
-
 /**
- * @brief  Function_Name
+ * @brief  NGL_Touch_DoTouch
  * @param  None
  * @retval None
  */
-int8_t NGL_Touch_Event(uint16_t data, NGL_TouchState state)
-{
+int8_t NGL_Touch_DoTouch(void) {
+    /* */
+    NGL_Page* pg = NGL_GUI_GetSelectedPage();
+    /* */
+    if ( touch_event_status != 1 || pg == (void*)0 ) {
+        return -1;
+    }
+    /* */
+    NGL_GUI_ClickPage( _event_touchPoint, _event_touchType );
+    if ( pg->Click != (void*)0 ) {
+        pg->Click( _event_touchPoint, _event_touchType );
+    }
+    /* */
+    touch_event_status = -1;
+    return 0;
+}
+
+/**
+ * @brief  NGL_Touch_GetEventStatus
+ * @param  None
+ * @retval None
+ */
+int8_t NGL_Touch_GetEventStatus(void) {
+  return touch_event_status;
+}
+
+/**
+ * @brief  NGL_Touch_ResetEventStatus
+ * @param  None
+ * @retval None
+ */
+void NGL_Touch_ResetEventStatus(void) {
+  touch_event_status = -1;
+}
+
+/**
+ * @brief  NGL_Touch_Event
+ * @param  None
+ * @retval None
+ */
+int8_t NGL_Touch_Event(uint16_t data, NGL_TouchState state) {
+
   NGL_TouchScreen* touch = NGL_Touch_getTouch();
   Coordinate pnt = {0, 0};
   static Coordinate old_pnt = {0, 0};
@@ -169,35 +204,30 @@ int8_t NGL_Touch_Event(uint16_t data, NGL_TouchState state)
   static NGL_TouchType touchtype = NGL_Touch_NoTouch;
   NGL_TouchState _touchState;
 
-  // work respect touch interface
+  /* work respect touch interface */
   if (touch->Interface == Touch_ADC_Interface) {
     touch_event_status = _touch_adc_event(touch, data, state);
   }
   else if (touch->Interface == Touch_SPI_Interface) {
     touch_event_status = _touch_spi_event(touch, data, state);
   }
-
   /* data complete */
   if (touch_event_status == 1) { // && (!_touch_hp_filter(&touch->data, FALSE)) ) {
-
     /* convert point to screen coordinates */
     touch->foops->point(touch->data, &pnt);
-
     /* If no touch */
     _touchState = touch->state;
     touch->callbacks->HAL_SetState(Touch_Polling);
-
+    /* */
     if (touch->callbacks->HAL_NoTouch() == 0) {
       touchtype = NGL_Touch_NoTouch;
       touch->callbacks->HAL_SetState(Touch_Default);
-      // _touch_hp_filter((void*)0, TRUE);
+      /* */
       pnt.x = old_pnt.x;
       pnt.y = old_pnt.y;
     }
     else {
-
       touch->callbacks->HAL_SetState(_touchState);
-
       /* if old state is NoTouch */
       if (touchtype == NGL_Touch_NoTouch) {
         touchtype = NGL_Touch_SingleTouch;
@@ -207,35 +237,17 @@ int8_t NGL_Touch_Event(uint16_t data, NGL_TouchState state)
           touchtype = NGL_Touch_RepeatTouch;
       }
     }
-
-    /* Send event signal to aplication */
-    touch->callbacks->EventSignal(pnt, touchtype);
-
+    /* */
     old_pnt.x = pnt.x;
     old_pnt.y = pnt.y;
+    /* Send event signal to aplication */
+    touch->callbacks->EventSignal(pnt, touchtype);
+    /*  */
+    _event_touchPoint.x = pnt.x;
+    _event_touchPoint.y = pnt.y;
+    _event_touchType = touchtype;
   }
-
   return touch_event_status;
-}
-
-/**
- * @brief  NGL_Touch_GetEventStatus
- * @param  None
- * @retval None
- */
-int8_t NGL_Touch_GetEventStatus(void)
-{
-  return touch_event_status;
-}
-
-/**
- * @brief  NGL_Touch_ResetEventStatus
- * @param  None
- * @retval None
- */
-void NGL_Touch_ResetEventStatus(void)
-{
-  touch_event_status = -1;
 }
 
 /**
@@ -243,32 +255,15 @@ void NGL_Touch_ResetEventStatus(void)
  * @param  None
  * @retval None
  */
-int8_t NGL_Touch_ButtonEventFilter(const NGL_Button* btn, NGL_TouchType type)
-{
-  // static int scnt = 0;
-  // NGL_TouchScreen* touch;
-
-  if (type != NGL_Touch_NoTouch) {
-    // scnt = 0;
-  // }
-  // else {
-
-    // touch = NGL_Touch_getTouch();
-
-    if(btn->ClickEvent != (void*)0) {
-
-      if (type == NGL_Touch_SingleTouch) {
-    		return 0;
-      }
-      else if (btn->ReClickState == ReClick_ENABLE) {
-        // if(scnt++ > touch->repeatDelay) {
-          // scnt = 0;
-          return 0;
-        // }
-      }
+int8_t NGL_Touch_ButtonEventFilter(const NGL_Button* btn, NGL_TouchType type) {
+  /* Button support click events */
+  if ( btn->ClickEvent != (void*)0 ) {
+    /* */
+    if ( (type == NGL_Touch_SingleTouch) || \
+         (type == NGL_Touch_RepeatTouch && btn->ReClickState == ReClick_ENABLE) ) {
+      return 0;
     }
   }
-
   return -1;
 }
 
@@ -277,13 +272,11 @@ int8_t NGL_Touch_ButtonEventFilter(const NGL_Button* btn, NGL_TouchType type)
  * @param  None
  * @retval None
  */
-int8_t NGL_Touch_CheckBoxEventFilter(const NGL_CheckBox* box, NGL_TouchType type)
-{
+int8_t NGL_Touch_CheckBoxEventFilter(const NGL_CheckBox* box, NGL_TouchType type) {
   /* */
   if (type == NGL_Touch_SingleTouch) {
     return 0;
   }
-
   return -1;
 }
 
@@ -292,7 +285,6 @@ int8_t NGL_Touch_CheckBoxEventFilter(const NGL_CheckBox* box, NGL_TouchType type
  * @param  None
  * @retval None
  */
-int8_t NGL_Touch_SeekBarEventFilter(const NGL_SeekBar* bar, NGL_TouchType type)
-{
+int8_t NGL_Touch_SeekBarEventFilter(const NGL_SeekBar* bar, NGL_TouchType type) {
   return 0;
 }

@@ -323,7 +323,7 @@ typedef struct {
 	NGL_Objects Objects;
 
 	const pEvent Draw;
-	const void (*Click)(Coordinate* data, NGL_TouchType type); // Page click (or index change) function
+	const void (*Click)(Coordinate data, NGL_TouchType type); // Page click (or index change) function
 } NGL_Page;
 
 
@@ -338,6 +338,7 @@ typedef struct  {
     const __pv_func calibrate;
     const __ppFoops point;
     const __peFoops event;
+    const __pv_func do_touch;
     const __pv_func reset;
 } NGL_TouchScreenFoops;
 
