@@ -33,7 +33,6 @@ void NGL_LCD_SetCursor(uint16_t X, uint16_t Y)
 	CS_LCD_clr;
 }
 
-
 /**
   * @brief  LCD_PutPixel
   * @param  Color
@@ -52,7 +51,6 @@ void NGL_LCD_PutPixel(uint16_t Color)
 		LCD->WritePixel(Color);
 	}
 }
-
 
 /**
   * @brief  LCD_PutSeveralPixels
@@ -85,7 +83,6 @@ static __inline void PutPixelsFast(uint32_t Counter, uint16_t Color)
 	}
 }
 
-
 /**
   * @brief  LCD_GetPixels
   * @param
@@ -105,7 +102,6 @@ void NGL_LCD_GetPixels(uint8_t *ReadData, uint16_t NumPixels)
 	}
 }
 
-
 /**
   * @brief  LCD_SetFullScreen
   * @param  None
@@ -115,7 +111,6 @@ void NGL_LCD_SetFullScreen(void)
 {
 	LCD->SetArea(0, 0, LCD->X_Max, LCD->Y_Max);
 }
-
 
 /**
   * @brief  LCD_ClearArea
@@ -131,7 +126,6 @@ void NGL_LCD_ClearArea(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint1
 	NGL_LCD_SetFullScreen();
 }
 
-
 /**
   * @brief  LCD_Clear_AllScreen
   * @param  Color
@@ -143,6 +137,30 @@ void NGL_LCD_Clear_AllScreen(uint16_t Color)
 	PutPixelsFast(LCD->Max_Points, Color);
 }
 
+/**
+  * @brief  NGL_LCD_SetRotation
+  * @param
+  * @retval None
+  */
+void NGL_LCD_SetRotation(NGL_RotationLCD NewState)
+{
+    uint16_t tmp;
+
+    LCD->SetRotation(NewState);
+
+    if(  (((NewState == _90_degree) || (NewState == _270_degree)) &&
+            ((LCD->Rotation == _0_degree) || (LCD->Rotation == _180_degree))) ||
+
+            (((NewState == _0_degree) || (NewState == _180_degree)) &&
+                    ((LCD->Rotation == _90_degree) || (LCD->Rotation == _270_degree))) )
+    {
+        tmp = LCD->X_Max;
+        LCD->X_Max = LCD->Y_Max;
+        LCD->Y_Max = tmp;
+    }
+
+    LCD->Rotation = NewState;
+}
 
 
 

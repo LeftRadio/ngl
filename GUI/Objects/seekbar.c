@@ -50,7 +50,7 @@ __inline static void _SeekBar_DrawInit(NGL_SeekBar* bar)
   * @param
   * @retval None
   */
-__inline static void _Draw_SeekBar_Slider(x, y, width, height, color, mode)
+__inline static void _Draw_SeekBar_Slider(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color, NGL_DrawState mode)
 {
     uint16_t i;
     uint16_t sz = nMIN(width, height);

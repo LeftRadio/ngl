@@ -13,7 +13,7 @@
 #define __MAL_H
 
 /* Includes ------------------------------------------------------------------*/
-#include <stdint.h>
+#include "NGL_types.h"
 
 /* Exported define -----------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
@@ -29,7 +29,8 @@ void NGL_LCD_Clear_AllScreen(uint16_t Color);
 void NGL_LCD_PutPixel(uint16_t Color);
 void NGL_LCD_GetPixels(uint8_t *ReadData, uint16_t NumPixels);
 
-
+void NGL_LCD_SetRotation(NGL_RotationLCD NewState);
+void NGL_LCD_WriteRegister(uint16_t RegisterAddress, uint16_t Data);
 
 
 #endif /* ___H */

@@ -40,8 +40,6 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
 typedef enum {RESET = 0, SET = !RESET} FlagStatus;
 
 /* --------------------------  HAL/GL elements enums & structs  -------------------------- */
-typedef void (*pEvent)(void);
-
 typedef enum {
     _0_degree,
     _90_degree,
@@ -118,8 +116,7 @@ typedef enum {
 typedef enum { NGL_Clip_IN, NGL_Clip_OUT } NGL_ClipType;
 
 
-
-/* LCD object type */
+/* LCD HAL object type */
 typedef struct {
 	NGL_HardConnectType ConnectionType;
 	uint8_t DataBusBits;
@@ -129,21 +126,20 @@ typedef struct {
 	uint16_t X_Register, Y_Register;
 	NGL_RotationLCD Rotation;
 
-	void (*WriteRAM_Prepare)(void);
-	void (*WriteCommand)(uint16_t Command);
-	void (*WriteData)(uint16_t Data);
-	uint16_t (*ReadData)(void);
-	void (*WritePixel)(uint16_t Data);
+    void (*WriteRAM_Prepare)(void);
+    void (*WriteCommand)(uint16_t Command);
+    void (*WriteData)(uint16_t Data);
+    uint16_t (*ReadData)(void);
+    void (*WritePixel)(uint16_t Data);
 
-	void (*ControllerInit)(void);
-	void (*SetRotation)(NGL_RotationLCD NewState);
-	void (*SetArea)(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1);
+    void (*ControllerInit)(void);
+    void (*SetRotation)(NGL_RotationLCD NewState);
+    void (*SetArea)(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1);
 
-	void (*SetCursor)(uint16_t X, uint16_t Y);
-	void (*GetPixels)(uint8_t *ReadData, uint16_t NumPixels);
+    void (*SetCursor)(uint16_t X, uint16_t Y);
+    void (*GetPixels)(uint8_t *ReadData, uint16_t NumPixels);
 
-} LCD_Typedef;
-
+} NGL_HAL_Typedef;
 
 
 /* --------------------------------  Font elements structs  -------------------------------- */
@@ -183,6 +179,8 @@ typedef struct {
 
 
 /* --------------------------------  UI elements structs  -------------------------------- */
+typedef void (*pEvent)(void);
+typedef void (*pPageClick)(Coordinate data, NGL_TouchType type);
 
 /* NGL Point type */
 typedef struct {
@@ -323,7 +321,7 @@ typedef struct {
 	NGL_Objects Objects;
 
 	const pEvent Draw;
-	const void (*Click)(Coordinate data, NGL_TouchType type); // Page click (or index change) function
+	const pPageClick Click; // Page click (or index change) function
 } NGL_Page;
 
 

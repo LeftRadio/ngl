@@ -41,7 +41,6 @@ typedef struct
 
 } LCD_GPIO_DataPort_TypeDef;
 
-
 /* Exported define -----------------------------------------------------------*/
 #define LCD_FMSC_COMMAND           (*((volatile uint16_t *) 0x60000000))		/* RS = 0 */
 #define LCD_FMSC_DATA              (*((volatile uint16_t *) 0x60020000))		/* RS = 1 */

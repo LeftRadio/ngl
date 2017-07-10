@@ -105,14 +105,12 @@ def sources():
         '.\\HAL_MAL\\LCD_GPIO.c',
         '.\\HAL_MAL\\LCD_HAL.c',
         '.\\HAL_MAL\\LCD_MAL.c',
-        '.\\HAL_MAL\\MAL.c',
 
         '.\\Colors\\colors.c',
 
         '.\\Font\\Font.c',
 
         '.\\Bitmaps\\bitmap.c',
-        '.\\Bitmaps\\picojpeg.c',
 
         '.\\Primitives\\Graphics_Primitive.c',
         '.\\Primitives\\traingle.c',

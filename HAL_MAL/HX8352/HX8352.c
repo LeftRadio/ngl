@@ -24,7 +24,7 @@ static void HX8352_SetCursor(uint16_t X, uint16_t Y);
 static void HX8352_GetPixels(uint8_t *ReadData, uint16_t NumPixels);
 
 /* Private variables ---------------------------------------------------------*/
-LCD_Typedef HX8352 =
+NGL_HAL_Typedef HX8352 =
 {
 
     LCD_GPIO_Connect,  // помним что у нас GPIO
@@ -76,66 +76,66 @@ void HX8352_Init(void)
 
     CS_LCD_set;
 
-    NGL_LCD_WriteRegister(0x83,0x02); // TESTM=1
-    NGL_LCD_WriteRegister(0x85,0x03); // VDC_SEL=011.
-    NGL_LCD_WriteRegister(0x8C,0x93); // STBA[7]=1, STBA[5:4]=01, STBA[1:0]=11
-    NGL_LCD_WriteRegister(0x91,0x01); // DCDC_SYNC=1
-    NGL_LCD_WriteRegister(0x83,0x00); // TESTM=0
+    NGL_HAL_WriteRegister(0x83,0x02); // TESTM=1
+    NGL_HAL_WriteRegister(0x85,0x03); // VDC_SEL=011.
+    NGL_HAL_WriteRegister(0x8C,0x93); // STBA[7]=1, STBA[5:4]=01, STBA[1:0]=11
+    NGL_HAL_WriteRegister(0x91,0x01); // DCDC_SYNC=1
+    NGL_HAL_WriteRegister(0x83,0x00); // TESTM=0
     //--------------------------------------------------------------------------------
     // Gamma Setting
-    NGL_LCD_WriteRegister(0x3E,0xB0);
-    NGL_LCD_WriteRegister(0x3F,0x03);
-    NGL_LCD_WriteRegister(0x40,0x10);
-    NGL_LCD_WriteRegister(0x41,0x56);
-    NGL_LCD_WriteRegister(0x42,0x13);
-    NGL_LCD_WriteRegister(0x43,0x46);
-    NGL_LCD_WriteRegister(0x44,0x23);
-    NGL_LCD_WriteRegister(0x45,0x76);
-    NGL_LCD_WriteRegister(0x46,0x4F);
-    NGL_LCD_WriteRegister(0x47,0x5F);
-    NGL_LCD_WriteRegister(0x48,0x4F);
-    NGL_LCD_WriteRegister(0x49,0x4F);
+    NGL_HAL_WriteRegister(0x3E,0xB0);
+    NGL_HAL_WriteRegister(0x3F,0x03);
+    NGL_HAL_WriteRegister(0x40,0x10);
+    NGL_HAL_WriteRegister(0x41,0x56);
+    NGL_HAL_WriteRegister(0x42,0x13);
+    NGL_HAL_WriteRegister(0x43,0x46);
+    NGL_HAL_WriteRegister(0x44,0x23);
+    NGL_HAL_WriteRegister(0x45,0x76);
+    NGL_HAL_WriteRegister(0x46,0x4F);
+    NGL_HAL_WriteRegister(0x47,0x5F);
+    NGL_HAL_WriteRegister(0x48,0x4F);
+    NGL_HAL_WriteRegister(0x49,0x4F);
     //--------------------------------------------------------------------------------
     // Power Supply Setting
-    NGL_LCD_WriteRegister(0x17,0x61); // RADJ=0110(85%), OSC_EN=1
-    NGL_LCD_WriteRegister(0x2B,0xF9); // N_DCDC=0xF9.
+    NGL_HAL_WriteRegister(0x17,0x61); // RADJ=0110(85%), OSC_EN=1
+    NGL_HAL_WriteRegister(0x2B,0xF9); // N_DCDC=0xF9.
     NGL_Delay(10);
-    NGL_LCD_WriteRegister(0x1B,0x14); // BT=0001, AP=100
-    NGL_LCD_WriteRegister(0x1A,0x11); // VC3=001, VC1=001
-    NGL_LCD_WriteRegister(0x1C,0x0d); // VRH=1101
-    NGL_LCD_WriteRegister(0x1F,0x3D); // VCM=100_0010
+    NGL_HAL_WriteRegister(0x1B,0x14); // BT=0001, AP=100
+    NGL_HAL_WriteRegister(0x1A,0x11); // VC3=001, VC1=001
+    NGL_HAL_WriteRegister(0x1C,0x0d); // VRH=1101
+    NGL_HAL_WriteRegister(0x1F,0x3D); // VCM=100_0010
     NGL_Delay(20);
-    NGL_LCD_WriteRegister(0x19,0x0A); // GASENB=0, PON=0, DK=1, XDK=0,
+    NGL_HAL_WriteRegister(0x19,0x0A); // GASENB=0, PON=0, DK=1, XDK=0,
     // VLCD_TRI=1, STB=0
-    NGL_LCD_WriteRegister(0x19,0x1A); // GASENB=0, PON=1, DK=1, XDK=0,
-    // VLCD_TRI=1, STB=0
-    NGL_Delay(40);
-    NGL_LCD_WriteRegister(0x19,0x12); // GASENB=0, PON=1, DK=0, XDK=0,
+    NGL_HAL_WriteRegister(0x19,0x1A); // GASENB=0, PON=1, DK=1, XDK=0,
     // VLCD_TRI=1, STB=0
     NGL_Delay(40);
-    NGL_LCD_WriteRegister(0x1E,0x20); // VCOMG=1, VDV=0_1100
+    NGL_HAL_WriteRegister(0x19,0x12); // GASENB=0, PON=1, DK=0, XDK=0,
+    // VLCD_TRI=1, STB=0
+    NGL_Delay(40);
+    NGL_HAL_WriteRegister(0x1E,0x20); // VCOMG=1, VDV=0_1100
     NGL_Delay(50);
     //--------------------------------------------------------------------------------
     // Display ON Setting
-    NGL_LCD_WriteRegister(0x3C,0x60); // N_SAP=0110 000
-    NGL_LCD_WriteRegister(0x3D,0x40); // I_SAP =0100 0000
-    NGL_LCD_WriteRegister(0x34,0x38); // EQS=0011 1000
-    NGL_LCD_WriteRegister(0x35,0x38); // EQP=0011 1000
-    NGL_LCD_WriteRegister(0x24,0x38); // GON=1, DTE=1, D=10
+    NGL_HAL_WriteRegister(0x3C,0x60); // N_SAP=0110 000
+    NGL_HAL_WriteRegister(0x3D,0x40); // I_SAP =0100 0000
+    NGL_HAL_WriteRegister(0x34,0x38); // EQS=0011 1000
+    NGL_HAL_WriteRegister(0x35,0x38); // EQP=0011 1000
+    NGL_HAL_WriteRegister(0x24,0x38); // GON=1, DTE=1, D=10
     NGL_Delay(40);
-    NGL_LCD_WriteRegister(0x24,0x3C); // GON=1, DTE=1, D=11
-    NGL_LCD_WriteRegister(0x16,0x1C); // BGR=0
-    NGL_LCD_WriteRegister(0x01,0x06); // INVON=0, NORNO=1
-    NGL_LCD_WriteRegister(0x55,0x00);
+    NGL_HAL_WriteRegister(0x24,0x3C); // GON=1, DTE=1, D=11
+    NGL_HAL_WriteRegister(0x16,0x1C); // BGR=0
+    NGL_HAL_WriteRegister(0x01,0x06); // INVON=0, NORNO=1
+    NGL_HAL_WriteRegister(0x55,0x00);
     //--------------------------------------------------------------------------------
-    NGL_LCD_WriteRegister(0x02,0x00); // Column address start2
-    NGL_LCD_WriteRegister(0x03,0x00); // Column address start1
-    NGL_LCD_WriteRegister(0x04,0x00); // Column address end2
-    NGL_LCD_WriteRegister(0x05,0xEF); // Column address end1
-    NGL_LCD_WriteRegister(0x06,0x00); // Row address start2
-    NGL_LCD_WriteRegister(0x07,0x00); // Row address start1
-    NGL_LCD_WriteRegister(0x08,0x01); // Row address end2
-    NGL_LCD_WriteRegister(0x09,0x8F); // Row address end1
+    NGL_HAL_WriteRegister(0x02,0x00); // Column address start2
+    NGL_HAL_WriteRegister(0x03,0x00); // Column address start1
+    NGL_HAL_WriteRegister(0x04,0x00); // Column address end2
+    NGL_HAL_WriteRegister(0x05,0xEF); // Column address end1
+    NGL_HAL_WriteRegister(0x06,0x00); // Row address start2
+    NGL_HAL_WriteRegister(0x07,0x00); // Row address start1
+    NGL_HAL_WriteRegister(0x08,0x01); // Row address end2
+    NGL_HAL_WriteRegister(0x09,0x8F); // Row address end1
 
     HX8352.WriteCommand(0x22);
 
@@ -194,11 +194,11 @@ void HX8352_SetCursor(uint16_t X, uint16_t Y)
 {
     CS_LCD_set;
 
-    NGL_LCD_WriteRegister(HX8352.X_Register, X >> 8); /* Row */
-    NGL_LCD_WriteRegister(HX8352.X_Register + 1, (uint8_t)X); /* Row */
+    NGL_HAL_WriteRegister(HX8352.X_Register, X >> 8); /* Row */
+    NGL_HAL_WriteRegister(HX8352.X_Register + 1, (uint8_t)X); /* Row */
 
-    NGL_LCD_WriteRegister(HX8352.Y_Register, Y >> 8); /* Line */
-    NGL_LCD_WriteRegister(HX8352.Y_Register + 1, (uint8_t)Y); /* Line */
+    NGL_HAL_WriteRegister(HX8352.Y_Register, Y >> 8); /* Line */
+    NGL_HAL_WriteRegister(HX8352.Y_Register + 1, (uint8_t)Y); /* Line */
 
     HX8352.WriteCommand(0x0022);
 
@@ -215,14 +215,14 @@ void HX8352_SetArea(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1)
 {
 	CS_LCD_set;
 
-	NGL_LCD_WriteRegister(0x02,Y0 >> 8); // Column address start2
-	NGL_LCD_WriteRegister(0x03,Y0);   // Column address start1
-	NGL_LCD_WriteRegister(0x04,Y1 >> 8); // Column address end2
-	NGL_LCD_WriteRegister(0x05,Y1);   // Column address end1
-	NGL_LCD_WriteRegister(0x06,X0 >> 8); // Row address start2
-	NGL_LCD_WriteRegister(0x07,X0); // Row address start1
-	NGL_LCD_WriteRegister(0x08,X1 >> 8); // Row address end2
-	NGL_LCD_WriteRegister(0x09,X1); // Row address end1
+	NGL_HAL_WriteRegister(0x02,Y0 >> 8); // Column address start2
+	NGL_HAL_WriteRegister(0x03,Y0);   // Column address start1
+	NGL_HAL_WriteRegister(0x04,Y1 >> 8); // Column address end2
+	NGL_HAL_WriteRegister(0x05,Y1);   // Column address end1
+	NGL_HAL_WriteRegister(0x06,X0 >> 8); // Row address start2
+	NGL_HAL_WriteRegister(0x07,X0); // Row address start1
+	NGL_HAL_WriteRegister(0x08,X1 >> 8); // Row address end2
+	NGL_HAL_WriteRegister(0x09,X1); // Row address end1
 
 	HX8352.WriteCommand(0x22);
 
