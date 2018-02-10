@@ -10,9 +10,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "NGL.h"
-#include "NGL_Types.h"
-#include "NGL_Touch.h"
-#include "NGL_Touch_Events.h"
+#include "NGL_types.h"
+#include "touch.h"
+#include "touch_events.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/

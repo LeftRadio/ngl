@@ -12,8 +12,7 @@
 #include <math.h>
 #include "NGL_types.h"
 #include "colors.h"
-#include "Graphics_Primitive.h"
-
+#include "primitives.h"
 
 /* Private typedef ----------------------------------------------------------*/
 /* Private define -----------------------------------------------------------*/

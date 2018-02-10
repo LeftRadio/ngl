@@ -15,7 +15,7 @@
 #include "bitmap.h"
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
-#include "Graphics_Primitive.h"
+#include "primitives.h"
 // #include "picojpeg.h"
 #include "colors.h"
 

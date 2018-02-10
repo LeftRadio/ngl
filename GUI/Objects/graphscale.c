@@ -16,7 +16,7 @@
 #include "NGL_types.h"
 #include "colors.h"
 #include "font.h"
-#include "Graphics_Primitive.h"
+#include "primitives.h"
 
 
 /* Private typedef ----------------------------------------------------------*/

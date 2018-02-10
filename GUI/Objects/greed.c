@@ -10,7 +10,7 @@
 
 /* Includes -----------------------------------------------------------------*/
 #include "NGL_types.h"
-#include "Graphics_Primitive.h"
+#include "primitives.h"
 #include "colors.h"
 #include "clip.h"
 

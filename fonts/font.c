@@ -15,7 +15,7 @@
 #include "NGL_types.h"
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
-#include "Font.h"
+#include "font.h"
 #include "colors.h"
 
 /* Private typedef -----------------------------------------------------------*/

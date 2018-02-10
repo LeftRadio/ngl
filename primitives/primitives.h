@@ -8,8 +8,8 @@
   ******************************************************************************
 **/
 
-#ifndef __GRAPHIC_PRIMITIVE_H
-#define __GRAPHIC_PRIMITIVE_H
+#ifndef __GRAPHIC_PRIMITIVES_H
+#define __GRAPHIC_PRIMITIVES_H
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
@@ -36,7 +36,7 @@ void NGL_GP_DrawFillTriangle(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1,
 
 
 
-#endif /* __GRAPHIC_PRIMITIVE_H */
+#endif /* __GRAPHIC_PRIMITIVES_H */
 /*********************************************************************************************************
       END FILE
 *********************************************************************************************************/

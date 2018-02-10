@@ -12,7 +12,7 @@
 #include <math.h>
 #include "NGL_types.h"
 #include "colors.h"
-#include "Graphics_Primitive.h"
+#include "primitives.h"
 #include "page.h"
 
 /* Private typedef ----------------------------------------------------------*/

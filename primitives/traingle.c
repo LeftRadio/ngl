@@ -14,7 +14,7 @@
 
 #include "NGL_types.h"
 #include "traingle.h"
-#include "Graphics_Primitive.h"
+#include "primitives.h"
 
 
 /* Private typedef -----------------------------------------------------------*/

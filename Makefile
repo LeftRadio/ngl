@@ -1,4 +1,8 @@
 
+######################################
+# System
+######################################
+OS = Linux
 
 ######################################
 # target
@@ -17,17 +21,17 @@ OPT = -O3
 # source path
 SOURCES_DIR =  \
  \
-Bitmaps \
-Colors \
-Font \
+bitmaps \
+colors \
+fonts \
 GUI \
 GUI/Objects \
 HAL_MAL \
 HAL_MAL/HX8352 \
 HAL_MAL/R61581 \
 HAL_MAL/SSD1289 \
-Primitives \
-TouchScreen
+primitives \
+touchscreen
 
 # firmware library path
 PERIFLIB_PATH =
@@ -39,9 +43,9 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
-Bitmaps/bitmap.c \
-Colors/colors.c \
-Font/Font.c \
+bitmaps/bitmap.c \
+colors/colors.c \
+fonts/font.c \
 GUI/page.c \
 GUI/Objects/button.c \
 GUI/Objects/checkbox.c \
@@ -56,11 +60,11 @@ HAL_MAL/LCD_MAL.c \
 HAL_MAL/HX8352/HX8352.c \
 HAL_MAL/R61581/R61581.c \
 HAL_MAL/SSD1289/SSD1289.c \
-Primitives/Clip.c \
-Primitives/Graphics_Primitive.c \
-Primitives/traingle.c \
-TouchScreen/NGL_Touch.c \
-TouchScreen/NGL_Touch_Events.c \
+primitives/clip.c \
+primitives/primitives.c \
+primitives/traingle.c \
+touchscreen/touch.c \
+touchscreen/touch_events.c \
 
 # ASM sources
 ASM_SOURCES =
@@ -73,13 +77,13 @@ PERIFLIB_SOURCES =
 #######################################
 # binaries
 #######################################
-BINPATH = C:\Program Files\GNU Tools ARM Embedded\5.4 2016q3\bin
+BINPATH =
 PREFIX = arm-none-eabi-
-CC = $(BINPATH)/$(PREFIX)gcc
-AS = $(BINPATH)/$(PREFIX)gcc -x assembler-with-cpp
-CP = $(BINPATH)/$(PREFIX)objcopy
-AR = $(BINPATH)/$(PREFIX)ar
-SZ = $(BINPATH)/$(PREFIX)size
+CC = $(BINPATH)$(PREFIX)gcc
+AS = $(BINPATH)$(PREFIX)gcc -x assembler-with-cpp
+CP = $(BINPATH)$(PREFIX)objcopy
+AR = $(BINPATH)$(PREFIX)ar
+SZ = $(BINPATH)$(PREFIX)size
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
 
@@ -111,13 +115,13 @@ AS_INCLUDES =
 # C includes
 C_INCLUDES =  \
 -I. \
--IBitmaps \
--IColors \
--IFont \
+-Ibitmaps \
+-Icolors \
+-Ifonts \
 -IGUI \
 -IHAL_MAL \
--IPrimitives \
--ITouchScreen
+-Iprimitives \
+-Itouchscreen
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -144,7 +148,7 @@ OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
-	$(CC) -c $(CFLAGS) $(BUILD_DIR)/$(notdir $(<:.c)) $< -o $@
+	$(CC) -c $(CFLAGS) $(notdir $(<:.c)) $< -o $@
 
 # $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 # 	$(AS) -c $(CFLAGS) $< -o $@

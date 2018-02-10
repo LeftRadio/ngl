@@ -12,7 +12,7 @@
 #include "NGL_types.h"
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
-#include "Graphics_Primitive.h"
+#include "primitives.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/

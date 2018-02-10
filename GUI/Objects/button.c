@@ -14,7 +14,7 @@
 #include "LCD_MAL.h"
 #include "font.h"
 #include "colors.h"
-#include "Graphics_Primitive.h"
+#include "primitives.h"
 #include "bitmap.h"
 
 

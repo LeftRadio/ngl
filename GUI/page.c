@@ -11,7 +11,7 @@
 /* Includes -----------------------------------------------------------------*/
 #include <string.h>
 #include "NGL.h"
-#include "NGL_Touch_Events.h"
+#include "touch_events.h"
 
 /* Private typedef ----------------------------------------------------------*/
 typedef void (*__pDrawOpbject)(const void* object);
