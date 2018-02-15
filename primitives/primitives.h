@@ -23,7 +23,7 @@ void NGL_GP_SetAntialiasingLine_State(uint8_t NewState);
 void NGL_GP_DrawPixel(uint16_t X, uint16_t Y, uint16_t Color);
 void NGL_GP_DrawLine(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color);
 void NGL_GP_DrawRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color);
-void NGL_GP_DrawFillRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color, FunctionalState border, uint16_t borderColor);
+void NGL_GP_DrawFillRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color, ngl_state border, uint16_t borderColor);
 void NGL_GP_DrawCircle(uint16_t X, uint16_t Y, uint16_t Radius, uint16_t Color);
 void NGL_GP_DrawBeveledRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Radius, uint16_t Color);
 void NGL_GP_DrawFillBeveledRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Radius, uint16_t Color, uint8_t border, uint16_t borderColor);

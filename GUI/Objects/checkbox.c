@@ -48,10 +48,10 @@ __inline static void _drawBox(NGL_CheckBox* checkbox)
 
     rect_color = NGL_Color_SetBrightness(box_color, 24);
     sz = (delta - (cnt*2));
-    NGL_GP_DrawFillRect( x0+cnt, y0+cnt, x0+cnt+sz, y0+cnt+sz, 0xFFFF, ENABLE, rect_color );
+    NGL_GP_DrawFillRect( x0+cnt, y0+cnt, x0+cnt+sz, y0+cnt+sz, 0xFFFF, ngl_enable, rect_color );
 
     // checked state
-    if (checkbox->Checked == ENABLE) {
+    if (checkbox->Checked == ngl_enable) {
 
         uint16_t _color = 0x0000;    // black color
 
@@ -109,8 +109,8 @@ void NGL_GUI_DrawCheckBox(const NGL_CheckBox* checkbox)
   */
 void NGL_GUI_CheckBoxEvent(NGL_CheckBox* box, NGL_TouchType EventType, int* EvnentData) {
 
-  if (box->Checked == ENABLE) box->Checked = DISABLE;
-  else box->Checked = ENABLE;
+  if (box->Checked == ngl_enable) box->Checked = ngl_disable;
+  else box->Checked = ngl_enable;
 
   NGL_GUI_DrawCheckBox(box);
 }

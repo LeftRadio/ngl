@@ -34,12 +34,12 @@ __inline static void _SeekBar_DrawInit(NGL_SeekBar* bar)
     int xc = bar->X0 + ((bar->X1 - bar->X0)/2);
 
     if(bar->Orientation == NGL_Horizontal) {
-        NGL_GP_DrawFillRect(bar->X0, yc - 2, bar->X1, yc + 2, bar->Color, DISABLE, 0);
+        NGL_GP_DrawFillRect(bar->X0, yc - 2, bar->X1, yc + 2, bar->Color, ngl_disable, 0);
         bar->old_posX = bar->X0;
         bar->old_posY = yc;
     }
     else {
-        NGL_GP_DrawFillRect(xc - 2, bar->Y0, xc + 2, bar->Y1, bar->Color, DISABLE, 0);
+        NGL_GP_DrawFillRect(xc - 2, bar->Y0, xc + 2, bar->Y1, bar->Color, ngl_disable, 0);
         bar->old_posX = xc;
         bar->old_posY = bar->Y0;
     }
@@ -56,7 +56,7 @@ __inline static void _Draw_SeekBar_Slider(uint16_t x, uint16_t y, uint16_t width
     uint16_t sz = nMIN(width, height);
     uint16_t tcolor;
 
-    if(mode == CLEAR) {
+    if(mode == ngl_clear) {
     	NGL_GP_DrawFillRect(
     			x - (width >> 1),
     			y - (height >> 1),
@@ -67,7 +67,7 @@ __inline static void _Draw_SeekBar_Slider(uint16_t x, uint16_t y, uint16_t width
                 0);
     }
     else {
-    	// draw slider
+    	// ngl_draw slider
     	for (i = 0; i < sz; i++) {
     		// p.setPen(self._slider_color.lighter(100 + (i * 10)))
     		tcolor = NGL_Color_SetBrightness(color, i);
@@ -113,7 +113,7 @@ __inline static void _DrawSeekBar(NGL_SeekBar* bar)
         y0 = posY - 2;
         y1 = posY + 2;
 
-        // calc and draw
+        // calc and ngl_draw
         if (posX > bar->old_posX) {
             x0 = bar->old_posX - sl_HalfWidth;
             x1 = posX - sl_HalfWidth;
@@ -147,7 +147,7 @@ __inline static void _DrawSeekBar(NGL_SeekBar* bar)
         x0 = posX - 2;
         x1 = posX + 2;
 
-        // calc and draw
+        // calc and ngl_draw
         if (posY > bar->old_posY) {
             y0 = bar->old_posY - sl_HalfHeight;
             y1 = posY - sl_HalfHeight;
@@ -169,21 +169,21 @@ __inline static void _DrawSeekBar(NGL_SeekBar* bar)
         y1 = nMIN( nMAX(y1, bar->Y0), bar->Y1 );
     }
 
-    // clear slider for old position
+    // ngl_clear slider for old position
     _Draw_SeekBar_Slider(
         bar->old_posX,
         bar->old_posY,
         sl_Width,
         sl_Height,
         NGL_GUI_GetSelectedPage()->BackColor,
-        CLEAR
+        ngl_clear
     );
 
-    // update draw strip
-    NGL_GP_DrawFillRect(x0, y0, x1, y1, color, DISABLE, 0);
+    // update ngl_draw strip
+    NGL_GP_DrawFillRect(x0, y0, x1, y1, color, ngl_disable, 0);
 
-    // draw slider for new position
-    _Draw_SeekBar_Slider(posX, posY, sl_Width, sl_Height, bar->SliderColor, DRAW);
+    // ngl_draw slider for new position
+    _Draw_SeekBar_Slider(posX, posY, sl_Width, sl_Height, bar->SliderColor, ngl_draw);
 
     // store new values
     bar->old_posX = posX;

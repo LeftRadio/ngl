@@ -10,6 +10,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "NGL_types.h"
+#include "LCD_GPIO.h"
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
 
@@ -67,7 +68,7 @@ static __inline void PutPixelsFast(uint32_t Counter, uint16_t Color)
 		do
 		{
 			LCD->WritePixel(Color);
-			WR_LCD_clr;	WR_LCD_set;
+			// WR_LCD_clr;	WR_LCD_set;
 		}
 		while(Counter--);
 

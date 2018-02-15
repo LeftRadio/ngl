@@ -10,6 +10,7 @@
 
 /* Includes -----------------------------------------------------------------*/
 #include "NGL_types.h"
+#include "LCD_GPIO.h"
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
 #include "font.h"
@@ -96,7 +97,7 @@ void _drawSimpleButton(const NGL_Button* Button)
         NGL_LCD_ClearArea(X0, Y0, X1, Y1, Button->Color);
     }
 
-    /* Set font, color and draw text */
+    /* ngl_set font, color and draw text */
     NGL_Font_SetFont(Button->Font);
     NGL_Color_SetTextColor(Button->TextColor);
 
@@ -119,7 +120,7 @@ void NGL_GUI_DrawButton(const NGL_Button* Button)
     uint16_t txt_X;
     uint16_t ico_X, ico_Y;
 
-    if(Button->Enabled != SET) return;
+    if(Button->Enabled != ngl_set) return;
 
     if(Button->ICO != (void*)0)
     {

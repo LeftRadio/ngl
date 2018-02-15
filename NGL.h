@@ -25,12 +25,12 @@ extern NGL_HAL_Typedef HX8352, R61581, SSD1289;
 /* Exported function ---------------------------------------------------------*/
 
 ///* --------------------------------  Hardware Aplication Level  -------------------------------- */
-extern void LCD_Set_RESET_Pin(GPIO_TypeDef* GPIOx, uint16_t Pin);
-extern void LCD_Set_RD_Pin(GPIO_TypeDef* GPIOx, uint16_t Pin);
-extern void LCD_Set_RS_Pin(GPIO_TypeDef* GPIOx, uint16_t Pin);
-extern void LCD_Set_WR_Pin(GPIO_TypeDef* GPIOx, uint16_t Pin);
-extern void LCD_Set_CS_Pin(GPIO_TypeDef* GPIOx, uint16_t Pin);
-extern void LCD_SetDataPort(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pins);
+extern void LCD_Set_RESET_Pin(void* GPIOx, uint16_t Pin);
+extern void LCD_Set_RD_Pin(void* GPIOx, uint16_t Pin);
+extern void LCD_Set_RS_Pin(void* GPIOx, uint16_t Pin);
+extern void LCD_Set_WR_Pin(void* GPIOx, uint16_t Pin);
+extern void LCD_Set_CS_Pin(void* GPIOx, uint16_t Pin);
+extern void LCD_SetDataPort(void* GPIOx, uint16_t GPIO_Pins);
 
 extern int8_t NGL_HAL_Init(NGL_HAL_Typedef* controller, void *pDelayFunc);
 extern void NGL_HAL_WriteRegister(uint16_t RegisterAddress, uint16_t Data);
@@ -66,11 +66,11 @@ extern void NGL_GP_DrawTriangle(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t 
 extern void NGL_GP_DrawFillTriangle(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t X2, uint16_t Y2, uint16_t Color);
 
 ///* ------------------------------  Object clip service function  ------------------------------ */
-extern ErrorStatus NGL_GP_NewClipObject(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, NGL_ClipType clipType, uint8_t NumInd);
-extern ErrorStatus NGL_GP_ClipClearObject(uint8_t NumInd);
+extern ngl_status NGL_GP_NewClipObject(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, NGL_ClipType clipType, uint8_t NumInd);
+extern ngl_status NGL_GP_ClipClearObject(uint8_t NumInd);
 
-extern FlagStatus NGL_GP_ClipPoint(uint16_t X0, uint16_t Y0);
-extern FlagStatus NGL_GP_ClipLine(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1);
+extern ngl_flag NGL_GP_ClipPoint(uint16_t X0, uint16_t Y0);
+extern ngl_flag NGL_GP_ClipLine(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1);
 
 ///* ---------------------------------  Fonts, draw char/string  --------------------------------- */
 extern void NGL_Font_SetFont(const NGL_Font *selectFont);

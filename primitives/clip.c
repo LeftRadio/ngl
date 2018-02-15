@@ -21,7 +21,7 @@
 /* Private variables ---------------------------------------------------------*/
 NGL_ClipObject ClipObjects[ClipMaxObjects];
 uint8_t NumOfActiveClipObjects = 0;
-FunctionalState gClipState = DISABLE;
+ngl_state gClipState = ngl_disable;
 
 /* Exported variables --------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -48,14 +48,14 @@ static __inline int32_t CScode (uint8_t objNum, uint16_t X, uint16_t Y)
 /**
   * @brief  CS_ClipLine_Out_Window
   * @param
-  * @retval Clip status - SET or RESET
+  * @retval Clip status - ngl_set or ngl_reset
   */
-static FlagStatus CS_ClipLine_Out_Window(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1, uint8_t objNum)
+static ngl_flag CS_ClipLine_Out_Window(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1, uint8_t objNum)
 {
 
 	uint16_t X0, Y0, X1, Y1; 			/* Координаты конца отрезка */
 	uint16_t c0, c1; 					/* Коды концов отрезка */
-	FlagStatus visible = RESET; 		/* 0/1 - не видим/видим*/
+	ngl_flag visible = ngl_reset; 		/* 0/1 - не видим/видим*/
 	int32_t ii, s; 						/* Рабочие переменные */
 	uint32_t dx, dy, 					/* Приращения координат*/
 	dxdy,dydx, 							/* Напрвление координат линии */
@@ -85,7 +85,7 @@ static FlagStatus CS_ClipLine_Out_Window(uint16_t *x0, uint16_t *y0, uint16_t *x
 
 
 	/* Основной цикл отсечения */
-	visible = RESET;  ii= 4;
+	visible = ngl_reset;  ii= 4;
 	do
 	{
 		if(c0 & c1)	   /* Целиком вне окна */
@@ -94,7 +94,7 @@ static FlagStatus CS_ClipLine_Out_Window(uint16_t *x0, uint16_t *y0, uint16_t *x
 		}
 		if(c0 == 0 && c1 == 0)		/* Целиком внутри окна */
 		{
-			visible = SET;
+			visible = ngl_set;
 			break;
 		}
 
@@ -132,7 +132,7 @@ static FlagStatus CS_ClipLine_Out_Window(uint16_t *x0, uint16_t *y0, uint16_t *x
 
 	} while (--ii >= 0);
 
-	if(visible == SET)
+	if(visible == ngl_set)
 	{
 		out:
 		if(X0 < X1){ *x0 = X0; *x1= X1; }
@@ -149,14 +149,14 @@ static FlagStatus CS_ClipLine_Out_Window(uint16_t *x0, uint16_t *y0, uint16_t *x
 /**
   * @brief  CS_ClipLine_IN_Window
   * @param
-  * @retval Clip status - SET or RESET
+  * @retval Clip status - ngl_set or ngl_reset
   */
-static FlagStatus CS_ClipLine_IN_Window(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1, uint8_t objNum)
+static ngl_flag CS_ClipLine_IN_Window(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1, uint8_t objNum)
 {
 
 	uint16_t X0, Y0, X1, Y1; 			/* Координаты конца отрезка */
 	uint16_t c0, c1; 					/* Коды концов отрезка */
-	FlagStatus visible = SET; 			/* 0/1 - не видим/видим*/
+	ngl_flag visible = ngl_set; 			/* 0/1 - не видим/видим*/
 	int32_t ii, s; 						/* Рабочие переменные */
 	uint32_t dx, dy, 					/* Приращения координат*/
 	dxdy,dydx, 							/* Напрвление координат линии */
@@ -178,24 +178,24 @@ static FlagStatus CS_ClipLine_IN_Window(uint16_t *x0, uint16_t *y0, uint16_t *x1
 	if(dx != 0) dydx = 0;
 	else if(dy == 0)
 	{
-		if ((c0 == 0) & (c1 == 0)) { visible = SET; goto all; }
-		else{ visible = RESET; goto out; }
+		if ((c0 == 0) & (c1 == 0)) { visible = ngl_set; goto all; }
+		else{ visible = ngl_reset; goto out; }
 	}
 	if (dy != 0) dxdy= 0;
 
 
 	/* Основной цикл отсечения */
-	visible = SET;  ii= 4;
+	visible = ngl_set;  ii= 4;
 	do
 	{
 		if(c0 & c1)	   /* Целиком вне окна */
 		{
-			visible = RESET;
+			visible = ngl_reset;
 			break;
 		}
 		if(c0 == 0 && c1 == 0)		/* Целиком внутри окна */
 		{
-			visible = SET;
+			visible = ngl_set;
 			break;
 		}
 
@@ -235,7 +235,7 @@ static FlagStatus CS_ClipLine_IN_Window(uint16_t *x0, uint16_t *y0, uint16_t *x1
 
 	} while (--ii >= 0);
 
-	if(visible == RESET)
+	if(visible == ngl_reset)
 	{
 		out:
 		if(r == 0)
@@ -260,22 +260,22 @@ static FlagStatus CS_ClipLine_IN_Window(uint16_t *x0, uint16_t *y0, uint16_t *x1
   * @param
   * @retval Operation status
   */
-ErrorStatus NGL_GP_ClipNewObject(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, NGL_ClipType clipType, uint8_t NumInd)
+ngl_status NGL_GP_ClipNewObject(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, NGL_ClipType clipType, uint8_t NumInd)
 {
 	uint8_t i;
 
-	if(NumInd == 0) return ERROR;
+	if(NumInd == 0) return ngl_error;
 	/* verify coordinates */
-	else if(X0 >= X1) return ERROR;
-	else if(Y0 >= Y1) return ERROR;
+	else if(X0 >= X1) return ngl_error;
+	else if(Y0 >= Y1) return ngl_error;
 
 	/* Find first empty Object */
 	for(i = 0; i < ClipMaxObjects; i++)
 	{
 		//str_cmp = strcmp (ClipObjects[i].Name, Name);
 
-		if(ClipObjects[i].NumInd == NumInd) return ERROR;
-		else if(ClipObjects[i].State != ENABLE)
+		if(ClipObjects[i].NumInd == NumInd) return ngl_error;
+		else if(ClipObjects[i].State != ngl_enable)
 		{
 			/* init new restriction object */
 			ClipObjects[i].X_Left = X0;
@@ -284,18 +284,18 @@ ErrorStatus NGL_GP_ClipNewObject(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t
 			ClipObjects[i].Y_Up = Y1;
 			ClipObjects[i].NumInd = NumInd;
 			ClipObjects[i].Type = clipType;
-			ClipObjects[i].State = ENABLE;
+			ClipObjects[i].State = ngl_enable;
 
 			if(clipType == NGL_Clip_IN) ClipObjects[i].pClipLine = CS_ClipLine_IN_Window;
 			else ClipObjects[i].pClipLine = CS_ClipLine_Out_Window;
 
 			NumOfActiveClipObjects++;
 
-			gClipState = ENABLE;
-			return SUCCESS;
+			gClipState = ngl_enable;
+			return ngl_success;
 		}
 	}
-	return ERROR;
+	return ngl_error;
 }
 
 /**
@@ -303,11 +303,11 @@ ErrorStatus NGL_GP_ClipNewObject(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t
   * @param
   * @retval Operation status
   */
-ErrorStatus NGL_GP_ClipClearObject(uint8_t NumInd)
+ngl_status NGL_GP_ClipClearObject(uint8_t NumInd)
 {
 	uint8_t i, cnt = 0;
 
-	if(NumInd == 0) return ERROR;
+	if(NumInd == 0) return ngl_error;
 
 	/* Find Object compare Name */
 	for(i = 0; i < ClipMaxObjects; i++)
@@ -320,47 +320,47 @@ ErrorStatus NGL_GP_ClipClearObject(uint8_t NumInd)
 			ClipObjects[i].X_Right = 0;
 			ClipObjects[i].Y_Up = 0;
 			ClipObjects[i].NumInd = 0;
-			ClipObjects[i].State = DISABLE;
+			ClipObjects[i].State = ngl_disable;
 			ClipObjects[i].pClipLine = CS_ClipLine_IN_Window;
 
 			NumOfActiveClipObjects--;
 			break;
 		}
-		else if(ClipObjects[i].State == DISABLE) cnt++;
+		else if(ClipObjects[i].State == ngl_disable) cnt++;
 	}
 
-	if(NumOfActiveClipObjects == 0)	gClipState = DISABLE;
-	else if(cnt == ClipMaxObjects){ gClipState = DISABLE; return ERROR; }
+	if(NumOfActiveClipObjects == 0)	gClipState = ngl_disable;
+	else if(cnt == ClipMaxObjects){ gClipState = ngl_disable; return ngl_error; }
 
-	return SUCCESS;
+	return ngl_success;
 }
 
 /**
   * @brief  NGL_GP_ClipPoint
   * @param	Point X/Y
-  * @retval Status SET or RESET
+  * @retval Status ngl_set or ngl_reset
   */
-FlagStatus NGL_GP_ClipPoint(uint16_t X0, uint16_t Y0)
+ngl_flag NGL_GP_ClipPoint(uint16_t X0, uint16_t Y0)
 {
 	uint8_t i;
 
 	/* if restriction is ON for one or more objects */
-	if(gClipState == ENABLE)
+	if(gClipState == ngl_enable)
 	{
 		for(i = 0; i <= NumOfActiveClipObjects; i++)
 		{
-			if(ClipObjects[i].State == ENABLE)
+			if(ClipObjects[i].State == ngl_enable)
 			{
 				if( (Y0 >= ClipObjects[i].Y_Down) && (Y0 <= ClipObjects[i].Y_Up) && \
 					(X0 >= ClipObjects[i].X_Left) && (X0 <= ClipObjects[i].X_Right) ) {
 
-					return SET;
+					return ngl_set;
 				}
 			}
 		}
 	}
 
-	return RESET;
+	return ngl_reset;
 }
 
 /**
@@ -412,29 +412,29 @@ FlagStatus NGL_GP_ClipPoint(uint16_t X0, uint16_t Y0)
   * @param  line vertex
   * @retval if line is part restrict return new X0, Y0 coordinate
   */
-FlagStatus NGL_GP_ClipLine(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1)
+ngl_flag NGL_GP_ClipLine(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1)
 {
 	uint8_t i;
-	FlagStatus Line_VisibleStatus = SET;
+	ngl_flag Line_VisibleStatus = ngl_set;
 
 	/* if restriction is ON for one or more objects */
-	if(gClipState != DISABLE)
+	if(gClipState != ngl_disable)
 	{
 		for(i = 0; i <= NumOfActiveClipObjects; i++)
 		{
-			if(ClipObjects[i].State == ENABLE)
+			if(ClipObjects[i].State == ngl_enable)
 			{
 				Line_VisibleStatus = ClipObjects[i].pClipLine(x0, y0, x1, y1, i);
 
 				if(NumOfActiveClipObjects == 1) return Line_VisibleStatus;
-				else if(Line_VisibleStatus == SET) return SET;
+				else if(Line_VisibleStatus == ngl_set) return ngl_set;
 			}
 		}
 
-		return RESET;
+		return ngl_reset;
 	}
 
-	return RESET;
+	return ngl_reset;
 }
 
 

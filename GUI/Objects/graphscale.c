@@ -84,12 +84,12 @@ static void drawHorizontal(const NGL_GraphScale* gScale)
     int lblpos[20] = {INT_MAX};
     int lblpos_t;
     uint16_t lbl_width;
-    uint16_t fheight = (gScale->ShowLabels == ENABLE)? fheight = gScale->Font->Height : 0;
+    uint16_t fheight = (gScale->ShowLabels == ngl_enable)? fheight = gScale->Font->Height : 0;
     uint16_t pos = 0;
     uint16_t  y0, y1, y11, y12;
     char lbl[10] = {0};
 
-    if (gScale->Flip == ENABLE) {
+    if (gScale->Flip == ngl_enable) {
         y0 = gScale->Y1 - fheight;
         y1 = y0-3;
         y11 = y0-5;
@@ -108,7 +108,7 @@ static void drawHorizontal(const NGL_GraphScale* gScale)
     }
 
     // lines
-    if (gScale->ShowLines == ENABLE) {
+    if (gScale->ShowLines == ngl_enable) {
 
         // base line
         NGL_GP_DrawLine(gScale->X0, y0, scale_X1, y0, gScale->Color);
@@ -126,7 +126,7 @@ static void drawHorizontal(const NGL_GraphScale* gScale)
     }
 
     // labels
-    if(gScale->ShowLabels == ENABLE) {
+    if(gScale->ShowLabels == ngl_enable) {
 
         NGL_Color_SetTextColor(gScale->Color);
         NGL_Font_SetFont(gScale->Font);

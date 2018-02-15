@@ -14,7 +14,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
-#include "LCD_GPIO.h"
 
 /* Exported define ------------------------------------------------------------*/
 #define NGL_MAX_BUTTONS						20
@@ -34,10 +33,10 @@
 
 
 /* Exported typedef ----------------------------------------------------------*/
-typedef enum {FALSE = 0, TRUE = !FALSE} bool;
-typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
-typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
-typedef enum {RESET = 0, SET = !RESET} FlagStatus;
+typedef enum {ngl_false = 0, ngl_true = !ngl_false} ngl_bool;
+typedef enum {ngl_disable = 0, ngl_enable = !ngl_disable} ngl_state;
+typedef enum {ngl_error = 0, ngl_success = !ngl_error} ngl_status;
+typedef enum {ngl_reset = 0, ngl_set = !ngl_reset} ngl_flag;
 
 /* --------------------------  HAL/GL elements enums & structs  -------------------------- */
 typedef enum {
@@ -59,8 +58,8 @@ typedef enum {
 
 
 typedef enum {
-    CLEAR = 0,
-    DRAW = 1
+    ngl_clear = 0,
+    ngl_draw = 1
 } NGL_DrawState;
 
 typedef enum {
@@ -207,7 +206,7 @@ typedef struct {
 	const NGL_ButtonType Type;			    // Type of button
 	uint16_t Color;						    // Forecolor for "Fill" type
 	uint16_t SelectedColor;				    // Forecolor selected button for "Fill" type
-	const FunctionalState ColorShift;	    // Forecolor shift for "Fill" type
+	const ngl_state ColorShift;	    // Forecolor shift for "Fill" type
 	const NGL_Image *ICO;				    // Icon/bitmap
 	const NGL_Font *Font;				    // Font for text
 	const int16_t TextOffset_X;			    // Text X offset
@@ -216,8 +215,8 @@ typedef struct {
 	char* Text;                             // Text
 
 	const NGL_ReClickState ReClickState;    // Enable or disable repeated clicks events
-	FunctionalState Visible;			    // Visible state
-	FlagStatus Enabled;					    // Enabled state, if RESET button not active and not request all clicks events
+	ngl_state Visible;			    // Visible state
+	ngl_flag Enabled;					    // Enabled state, if RESET button not active and not request all clicks events
 
 	const pEvent ClickEvent;                 // Click event function pointer
 } NGL_Button;
@@ -229,7 +228,7 @@ typedef struct {
 	const uint16_t Width;					//
 	const uint16_t Height;					//
 	const uint16_t Color;					//
-	const FunctionalState  CentralLines;	//
+	const ngl_state  CentralLines;	//
 } NGL_Grid;
 
 /* NGL UI FillBar type */
@@ -239,10 +238,10 @@ typedef struct {
 	const uint16_t Level_MIN, Level_MAX;
 	uint16_t Level;
     uint16_t sfX1, sfY1;
-	FunctionalState Logarithmic;
+	ngl_state Logarithmic;
 	uint16_t FullScale_dB;
-	FunctionalState Border;
-	FunctionalState Markers;
+	ngl_state Border;
+	ngl_state Markers;
 	uint16_t MarkersColor;
 	uint16_t Color;
 } NGL_FillBar;
@@ -255,7 +254,7 @@ typedef struct {
 	const NGL_VertHoriz_Type Orientation;
 	const int16_t Level_MIN, Level_MAX;
 	int16_t Level;
-    FunctionalState ShowProgress;
+    ngl_state ShowProgress;
 	uint16_t Color;
     uint16_t SliderColor;
     const pEvent ClickEvent;
@@ -269,9 +268,9 @@ typedef struct {
     const int Labels[20];
     uint8_t LabelsCount;
     char *Units;
-    FunctionalState ShowLabels;
-    FunctionalState ShowLines;
-    FunctionalState Flip;
+    ngl_state ShowLabels;
+    ngl_state ShowLines;
+    ngl_state Flip;
     const NGL_VertHoriz_Type Orientation;
     NGL_Font* Font;
     uint16_t Color;
@@ -280,7 +279,7 @@ typedef struct {
 /* NGL UI CheckBox type */
 typedef struct {
     const uint16_t X0, Y0, X1, Y1;
-    FunctionalState Checked;
+    ngl_state Checked;
     const NGL_Font* Font;
     const char* Text;
     uint16_t Color;
@@ -316,11 +315,11 @@ typedef struct {
 	const uint16_t Size[4];		// [X0, Y0, X1, Y1]
 	const uint8_t ID;			// Clip object ID
 	const uint16_t BackColor;
-	const bool ExitAllowed;		// Exit allowed
+	const ngl_bool ExitAllowed;		// Exit allowed
 
 	NGL_Objects Objects;
 
-	const pEvent Draw;
+	const pEvent ngl_draw;
 	const pPageClick Click; // Page click (or index change) function
 } NGL_Page;
 
@@ -378,8 +377,8 @@ typedef struct  {
     uint16_t Y_Up;
     uint8_t NumInd;
     NGL_ClipType Type;
-    FunctionalState State;
-    FlagStatus (*pClipLine)(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1, uint8_t objNum);
+    ngl_state State;
+    ngl_flag (*pClipLine)(uint16_t *x0, uint16_t *y0, uint16_t *x1, uint16_t *y1, uint8_t objNum);
 } NGL_ClipObject;
 
 

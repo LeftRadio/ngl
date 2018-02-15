@@ -39,7 +39,7 @@ void NGL_GUI_DrawFillBar(const NGL_FillBar* FillBar)
     bar->Level = nMAX(nMIN(bar->Level, bar->Level_MAX), bar->Level_MIN);
 
     // if log type fillbar
-    if(bar->Level != 0 && bar->Logarithmic == ENABLE) {
+    if(bar->Level != 0 && bar->Logarithmic == ngl_enable) {
         fullscale = bar->FullScale_dB;
         level = fullscale - 20 * log10f( (float)(bar->Level_MAX - bar->Level_MIN) / (float)bar->Level );
     }
@@ -94,15 +94,15 @@ void NGL_GUI_DrawFillBar(const NGL_FillBar* FillBar)
     }
 
     // draw fillbar
-    NGL_GP_DrawFillRect( fX0, fY0, fX1, fY1, color, DISABLE, 0 );
+    NGL_GP_DrawFillRect( fX0, fY0, fX1, fY1, color, ngl_disable, 0 );
 
     // draw fillbar border
-    if(bar->Border == ENABLE) {
+    if(bar->Border == ngl_enable) {
         NGL_GP_DrawRect(bar->X0, bar->Y0, bar->X1, bar->Y1, bar->Color);
     }
 
     // draw markers
-    if(bar->Markers == ENABLE) {
+    if(bar->Markers == ngl_enable) {
 
         if(bar->Orientation == NGL_Horizontal) {
             NGL_GP_DrawLine(bar->X0, bar->Y0, bar->X0, bar->Y1, bar->MarkersColor);

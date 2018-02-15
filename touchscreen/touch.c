@@ -166,7 +166,7 @@ static int8_t _touchCalibrate(void) {
 	uint8_t i = 0, verify_cnt = 5;
 	Coordinate samples[4];
 	Coordinate verifyPoint = { LCD->X_Max / 2, LCD->Y_Max / 2 };
-	bool EndCalibration = FALSE;
+	ngl_bool EndCalibration = ngl_false;
 
 	if(_touch != (void*)0) {
 
@@ -242,7 +242,7 @@ static int8_t _touchCalibrate(void) {
 
 			/* Clear */
 			NGL_LCD_Clear_AllScreen(0x0000);
-			EndCalibration = TRUE;
+			EndCalibration = ngl_true;
 
 			/* Write success flag and calibration data */
 			if(verify_cnt != 0)	{

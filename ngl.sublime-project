@@ -2,10 +2,18 @@
     "build_systems":
     [
         {
-            "cmd": ["mingw32-make"],
+            "cmd": ["make"],
+            "windows": { "cmd": ["mingw32-make"] },
             "name": "ARM build",
             "working_dir": "${project_path}",
-            "file_regex": "^(.*):(\\d+):(\\d+):\\s*(.*)$"
+            "file_regex": "^(.*):(\\d+):(\\d+):\\s*(.*)$",
+            "variants": [
+                {
+                    "name": "Clean",
+                    "cmd": ["cmd", "clean"],
+                    "windows": { "cmd": ["mingw32-make", "clean"] }
+                }
+            ]
         }
     ],
     "folders":
@@ -16,7 +24,6 @@
         }
     ],
 
-    // Настройки линтеров
     "SublimeLinter":
     {
         "linters":

@@ -13,6 +13,7 @@
 #include <string.h>
 
 #include "NGL_types.h"
+#include "LCD_GPIO.h"
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
 #include "font.h"

@@ -30,7 +30,7 @@
 void NGL_GUI_DrawGrid(NGL_Grid *Grid, NGL_DrawState state)
 {
     uint16_t i, j, k, l;
-    uint16_t tmpColor = (state == CLEAR)?  NGL_Color_GetBackColor() : Grid->Color;
+    uint16_t tmpColor = (state == ngl_clear)?  NGL_Color_GetBackColor() : Grid->Color;
     uint16_t X0, Y0, X1, Y1;
 
     uint16_t left  = Grid->CenterX - (Grid->Width / 2);
@@ -41,7 +41,7 @@ void NGL_GUI_DrawGrid(NGL_Grid *Grid, NGL_DrawState state)
     NGL_Color_SetGraphicsColor(tmpColor);
 
     /* if need draw central lines */
-    if(Grid->CentralLines == ENABLE)
+    if(Grid->CentralLines == ngl_enable)
     {
         X0 = left;
         Y0 = Grid->CenterY;

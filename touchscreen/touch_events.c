@@ -75,7 +75,7 @@ static __inline int8_t _touch_spi_event( NGL_TouchScreen* touch, uint16_t data, 
  * @param  None
  * @retval None
  */
-static __inline int8_t _touch_filter(Coordinate* pnt, bool Reset)
+static __inline int8_t _touch_filter(Coordinate* pnt, ngl_bool Reset)
 {
   const uint8_t samples = 2;
   const uint8_t hysteresis = 12;
@@ -85,7 +85,7 @@ static __inline int8_t _touch_filter(Coordinate* pnt, bool Reset)
   uint8_t j;
   int8_t rng;
 
-  if(Reset == TRUE) {
+  if(Reset == ngl_true) {
     for (j = 0; j < samples; j++)
     {
       old_pnts[j].x = 0;
@@ -122,11 +122,11 @@ static __inline int8_t _touch_filter(Coordinate* pnt, bool Reset)
  * @param  None
  * @retval None
  */
-static __inline int8_t _touch_hp_filter(Coordinate* pnt, bool Reset) {
+static __inline int8_t _touch_hp_filter(Coordinate* pnt, ngl_bool Reset) {
   int8_t status = -1;
   static Coordinate old_pnt = {UINT_LEAST16_MAX, UINT_LEAST16_MAX};
 
-  if(Reset == TRUE) {
+  if(Reset == ngl_true) {
     old_pnt.x = UINT_LEAST16_MAX;
     old_pnt.y = UINT_LEAST16_MAX;
   }

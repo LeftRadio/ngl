@@ -10,6 +10,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "NGL_types.h"
+#include "LCD_GPIO.h"
 #include "LCD_HAL.h"
 #include "LCD_MAL.h"
 #include "primitives.h"
@@ -18,9 +19,9 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-volatile uint8_t Antialiasing = 0;
-volatile uint16_t NumLevels = 256;
-volatile uint16_t IntensityBits = 8;
+volatile uint8_t GP_Antialiasing = 0;
+volatile uint16_t GP_NumLevels = 256;
+volatile uint16_t GP_IntensityBits = 8;
 
 /* Exported variables --------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -35,20 +36,20 @@ volatile uint16_t IntensityBits = 8;
 void NGL_GP_SetAntialiasingLine_State(uint8_t NewState)
 {
 	if((NewState != 0) && (NewState != 1)) return;
-	Antialiasing = NewState;
+	GP_Antialiasing = NewState;
 }
 
 
 /**
   * @brief  NGL_GP_AntialiasingParam
-  * @param  NumLevels is number of color levels. Pass 256.
-            IntensityBits denotes bits used to represent color component. Pass 8.
+  * @param  GP_NumLevels is number of color levels. Pass 256.
+            GP_IntensityBits denotes bits used to represent color component. Pass 8.
   * @retval None
   */
 void NGL_GP_AntialiasingParam(uint16_t numLevels, uint16_t intensityBits)
 {
-	NumLevels = numLevels;
-	IntensityBits = intensityBits;
+	GP_NumLevels = numLevels;
+	GP_IntensityBits = intensityBits;
 }
 
 
@@ -236,13 +237,13 @@ void NGL_GP_DrawRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_
             border, borderColor
   * @retval None
   */
-void NGL_GP_DrawFillRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color, FunctionalState border, uint16_t borderColor)
+void NGL_GP_DrawFillRect(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Color, ngl_state border, uint16_t borderColor)
 {
 	/* Fill rectangle */
 	NGL_LCD_ClearArea(X0, Y0, X1, Y1, Color);
 
 	/* Set new graphics color and draw border */
-	if(border == ENABLE) {
+	if(border == ngl_enable) {
 		NGL_GP_DrawRect(X0, Y0, X1, Y1, borderColor);
 	}
 }
