@@ -68,6 +68,20 @@ typedef enum {
 } NGL_TransparentState;
 
 typedef enum {
+    ngl_alignX_undef,
+    ngl_alignX_left,
+    ngl_alignX_center,
+    ngl_alignX_right
+} NGL_AligmentX_Type;
+
+typedef enum {
+    ngl_alignY_undef,
+    ngl_alignY_top,
+    ngl_alignY_center,
+    ngl_alignY_bottom
+} NGL_AligmentY_Type;
+
+typedef enum {
     TextButton,
     ColorFillButton,
     IconButton
