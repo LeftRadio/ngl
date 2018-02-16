@@ -34,97 +34,88 @@ NGL_Font *nfont = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private function  --------------------------------------------------------*/
 
+
 /**
   * @brief  NGL_Font_SetFont
   * @param
   * @retval None
   */
-void NGL_Font_SetFont(const NGL_Font *selectFont)
-{
-	nfont = (NGL_Font*)selectFont;
+void NGL_Font_SetFont(const NGL_Font *selectFont) {
+    nfont = (NGL_Font*)selectFont;
 }
-
 
 /**
   * @brief  NGL_Font_DrawChar
   * @param
   * @retval CHAR_WIDTH(c);
   */
-uint8_t NGL_Font_DrawChar(uint16_t X, uint16_t Y, NGL_TransparentState trspr, char c)
-{
-	int16_t i;
-	uint8_t k; // переменные для циклов
-	uint16_t Xa;
-  uint16_t Ya; // позиция по Y для пропуска точек
-	uint8_t *ptr = (uint8_t*)CHAR_DATA(c); // указатель на данные символа
-	uint8_t CharWidht_Bytes = (CHAR_WIDTH(c) + 7) / 8;
-	uint8_t CharEndByteBitMask = 1 << ((CharWidht_Bytes * 8) - CHAR_WIDTH(c));
-	uint8_t CharByteBitMask = 0x01;
-	uint8_t mask;  // маска для расшифровки байтов данных символа, в двоичном формате = 0b10000000
+uint8_t NGL_Font_DrawChar(uint16_t X, uint16_t Y, NGL_TransparentState trspr, char c) {
+    int16_t i;
+    uint8_t k;
+    uint16_t Xa;
+    uint16_t Ya; // y position for skip pixels
+    uint8_t *ptr = (uint8_t*)CHAR_DATA(c);
+    uint8_t CharWidht_Bytes = (CHAR_WIDTH(c) + 7) / 8;
+    uint8_t CharEndByteBitMask = 1 << ((CharWidht_Bytes * 8) - CHAR_WIDTH(c));
+    uint8_t CharByteBitMask = 0x01;
+    uint8_t mask;  // mask for decrypt data bytes
+    uint16_t CharHeight = CHAR_HEIGHT(c) - 1;
+    uint16_t TextColor = NGL_Color_GetTextColor();
+    uint16_t BackColor = NGL_Color_GetBackColor();
 
-  uint16_t CharHeight = CHAR_HEIGHT(c) - 1;
+    /* verify font and char in font */
+    if(!nfont || (c < nfont->FirstChar || c > nfont->LastChar)){
+        return 0;
+    }
 
-  uint16_t TextColor = NGL_Color_GetTextColor();
-  uint16_t BackColor = NGL_Color_GetBackColor();
+    CS_LCD_set;
+    /* */
+    for(i = 0; i <= CharHeight ; i++) {
+        /* x,y position for skip pixels */
+        Xa = X;
+        Ya = (Y + (nfont->Height-1)) - i;
+        /* set LCD cursor */
+        LCD->SetCursor(Xa, Ya);
+        Xa++;
+        /* */
+        for(k = 0; k < CharWidht_Bytes; k++) {
+            /* if byte not empty */
+            if((*ptr & 0xFF) != 0) {
+                if(k < CharWidht_Bytes - 1) CharByteBitMask = 0x01;
+                else CharByteBitMask = CharEndByteBitMask;
+                /* reset bit mask */
+                mask = 0x80;
+                do {
+                    /* put pixel */
+                    if(*ptr & mask) {
+                        LCD->WritePixel(TextColor);
+                    }
+                    /* else skip if transparent */
+                    else if(trspr == Transparent) {
+                        LCD->SetCursor(Xa, Ya);
+                    }
+                    /* else put backcolor pixel */
+                    else {
+                        LCD->WritePixel(BackColor);
+                    }
+                    /* shift to next */
+                    Xa++;
+                    mask >>= 1;
+                } while (mask >= CharByteBitMask);
+            }
+            /* else skip byte */
+            else {
+                LCD->SetCursor(Xa + 7, Ya);
+                Xa += 8;
+            }
 
-	/* Если шрифт не определен или символ находится вне границ символов для шрифта то выход */
-	if(!nfont) return 0;
-	if(c < nfont->FirstChar || c > nfont->LastChar) return 0;
+            ptr++;
+        }
+    }
+    CS_LCD_clr;
 
-	CS_LCD_set;
-
-	/* выводим символ вертикальными линиями слева-направо */
-	for(i = 0; i <= CharHeight ; i++)
-	{
-		/* установка курсора LCD */
-		Xa = X; // позиция по X для пропуска точек
-		Ya = (Y + (nfont->Height-1)) - i;
-    LCD->SetCursor(Xa, Ya);
-		Xa++;
-
-		/* расшифровываем байты данных, один байт содержит информацию о 8-ми точках по горизонтали */
-		for(k = 0; k < CharWidht_Bytes; k++)
-		{
-			if((*ptr & 0xFF) != 0)									// --- если байт не равен нулю то
-			{
-				if(k < CharWidht_Bytes - 1) CharByteBitMask = 0x01;
-				else CharByteBitMask = CharEndByteBitMask;
-
-				mask = 0x80;										// сбрасываем битовую маску
-				do
-				{
-					if(*ptr & mask)
-					{
-						LCD->WritePixel(TextColor);		// иначе если совпало с битом маски выводим точку цветом текста
-					}
-					else if(trspr == Transparent)
-					{
-						LCD->SetCursor(Xa, Ya);				// если выводим символ с прозрачным фоном пропускаем точку
-					}
-					else
-					{
-						LCD->WritePixel(BackColor);
-					}
-
-					Xa++;
-					mask >>= 1;
-
-				} while (mask >= CharByteBitMask);
-			}
-			else													// --- иначе пропускаем байт
-			{
-				LCD->SetCursor(Xa + 7, Ya);
-				Xa += 8;
-			}
-
-			ptr++;                                        // инкремент указателя на байт данных символа
-		}
-	}
-
-	CS_LCD_clr;
-
-	/* возвращаем ширину символа */
-	return CHAR_WIDTH(c);
+    /* return char width */
+    return CHAR_WIDTH(c);
 }
 
 
@@ -133,39 +124,9 @@ uint8_t NGL_Font_DrawChar(uint16_t X, uint16_t Y, NGL_TransparentState trspr, ch
   * @param
   * @retval
   */
-uint16_t NGL_Font_DrawString(uint16_t X, uint16_t Y, uint16_t Color, const NGL_Font *font, NGL_TransparentState trspr, char *str)
-{
-	nfont = (NGL_Font*)font;
-	return NGL_Font_DrawColorString(X, Y, Color, trspr, str);
-}
-
-/**
-  * @brief  NGL_Font_DrawString
-  * @param
-  * @retval
-  */
-uint16_t NGL_Font_DrawFastString(uint16_t XPos, uint16_t YPos, NGL_TransparentState trspr, char *str)
-{
-	/* переменная для запоминания ширины последнего напечатоного символа */
-	uint8_t lastPrintCharWidth = 0;
-
-	/* если шрифт не определен то выход */
-	if(!nfont || !str) return 0;
-
-	/* печатаем пока есть символы в строке */
-	while(*str!=0)
-	{
-		lastPrintCharWidth = NGL_Font_DrawChar(XPos, YPos, trspr, *str);  // выводим сивол и запоминаем его ширину
-
-		XPos += (lastPrintCharWidth + CHAR_SPACE);                   // смещаем курсор на ширину напечатонного символа + межсимвольное растояние
-		str++;	                                                     // инкремент указателя на строку
-
-//		if(trspr == 0)
-//		{
-//			NGL_LCD_ClearArea(XPos - CHAR_SPACE, YPos, XPos, YPos + nfont->Height, NGL_Color_GetBackColor());
-//		}
-	}
-	return XPos;
+uint16_t NGL_Font_DrawString(uint16_t X, uint16_t Y, uint16_t Color, const NGL_Font *font, NGL_TransparentState trspr, char *str) {
+    nfont = (NGL_Font*)font;
+    return NGL_Font_DrawColorString(X, Y, Color, trspr, str);
 }
 
 
@@ -174,10 +135,35 @@ uint16_t NGL_Font_DrawFastString(uint16_t XPos, uint16_t YPos, NGL_TransparentSt
   * @param
   * @retval
   */
-uint16_t NGL_Font_DrawColorString(uint16_t X, uint16_t Y, uint16_t Color, NGL_TransparentState trspr, char *str)
-{
-	NGL_Color_SetTextColor(Color);
-	return NGL_Font_DrawFastString(X, Y, trspr, str);
+uint16_t NGL_Font_DrawFastString(uint16_t XPos, uint16_t YPos, NGL_TransparentState trspr, char *str) {
+    /* varible for last char width */
+    uint8_t lastPrintCharWidth = 0;
+    /* verify font/srting */
+    if(!nfont || !str) return 0;
+    /* aligments */
+
+    /* print while chars in string */
+    while(*str != 0) {
+        lastPrintCharWidth = NGL_Font_DrawChar(XPos, YPos, trspr, *str);
+        XPos += (lastPrintCharWidth + CHAR_SPACE);
+        str++;
+    //if(trspr == 0)
+    //{
+    //NGL_LCD_ClearArea(XPos - CHAR_SPACE, YPos, XPos, YPos + nfont->Height, NGL_Color_GetBackColor());
+    //}
+    }
+    return XPos;
+}
+
+
+/**
+  * @brief  NGL_Font_DrawString
+  * @param
+  * @retval
+  */
+uint16_t NGL_Font_DrawColorString(uint16_t X, uint16_t Y, uint16_t Color, NGL_TransparentState trspr, char *str) {
+    NGL_Color_SetTextColor(Color);
+    return NGL_Font_DrawFastString(X, Y, trspr, str);
 }
 
 
@@ -186,19 +172,17 @@ uint16_t NGL_Font_DrawColorString(uint16_t X, uint16_t Y, uint16_t Color, NGL_Tr
   * @param
   * @retval
   */
-uint16_t NGL_Font_DrawCropString(uint16_t X, uint16_t Y, NGL_TransparentState trspr, char *str, uint8_t Pos, uint8_t Lenght, uint16_t Color)
-{
-	uint8_t i;
-	char CropString[Lenght + 1];
-	uint16_t X_Start = X + NGL_Font_MeasureCropStringWidth(str, Pos);
-	uint16_t X_End = 0;
-
-	for(i = 0; i < Lenght; i++) CropString[i] = *(str + Pos + i);
-	CropString[Lenght] = 0;
-
-	X_End = NGL_Font_DrawColorString(X_Start, Y, Color, trspr, CropString);
-
-	return X_End;
+uint16_t NGL_Font_DrawCropString(uint16_t X, uint16_t Y, NGL_TransparentState trspr, char *str, uint8_t Pos, uint8_t Lenght, uint16_t Color) {
+    uint8_t i;
+    char CropString[Lenght + 1];
+    uint16_t X_Start = X + NGL_Font_MeasureCropStringWidth(str, Pos);
+    // uint16_t X_End = 0;
+    for(i = 0; i < Lenght; i++) {
+      CropString[i] = *(str + Pos + i);
+    }
+    CropString[Lenght] = 0;
+    /* */
+    return NGL_Font_DrawColorString(X_Start, Y, Color, trspr, CropString);;
 }
 
 
@@ -207,21 +191,25 @@ uint16_t NGL_Font_DrawCropString(uint16_t X, uint16_t Y, NGL_TransparentState tr
   * @param  Pointer to measuring string
   * @retval String width
   */
-uint16_t NGL_Font_MeasureStringWidth(const NGL_Font *nfont, char *str)
-{
-	uint16_t Pos = 0;
+uint16_t NGL_Font_MeasureStringWidthFast(char *str) {
+    uint16_t Pos = 0;
+    while(*str != 0) {
+        Pos += (CHAR_WIDTH(*str) + CHAR_SPACE);
+        str++;
+    }
+    str--;
+    return Pos - CHAR_SPACE;
+}
 
-  NGL_Font_SetFont(nfont);
 
-	/* пока есть символы в строке */
-	while(*str != 0)
-	{
-		Pos += (CHAR_WIDTH(*str) + CHAR_SPACE);
-		str++;
-	}
-
-	str--;
-	return Pos - CHAR_SPACE;
+/**
+  * @brief  NGL_Font_MeasureStrimgWidth
+  * @param  Pointer to measuring string
+  * @retval String width
+  */
+uint16_t NGL_Font_MeasureStringWidth(const NGL_Font *nfont, char *str) {
+    NGL_Font_SetFont(nfont);
+    return NGL_Font_MeasureStringWidthFast(str);
 }
 
 
@@ -233,21 +221,15 @@ uint16_t NGL_Font_MeasureStringWidth(const NGL_Font *nfont, char *str)
             NumSymbols - symbols num in pointer string to measure
   * @retval Width in pixels symbols from *str to *(str + NumSymbols)
   */
-uint16_t NGL_Font_MeasureCropStringWidth(char *str, uint8_t NumSymbols)
-{
-	uint16_t Pos = 0;
-
-	/* пока есть символы в строке */
-	while((*str != 0) && (NumSymbols > 0))
-	{
-		Pos += (CHAR_WIDTH(*str) + CHAR_SPACE);
-		str++;
-		NumSymbols--;
-	}
-
-	return Pos;
+uint16_t NGL_Font_MeasureCropStringWidth(char *str, uint8_t NumSymbols) {
+    uint16_t Pos = 0;
+    while((*str != 0) && (NumSymbols > 0)) {
+        Pos += (CHAR_WIDTH(*str) + CHAR_SPACE);
+        str++;
+        NumSymbols--;
+    }
+    return Pos;
 }
-
 
 
 /**
@@ -268,7 +250,7 @@ static __inline char uint8_t_to_char(uint8_t val)
 void NGL_floatToString(char *ValText, float Value, uint8_t Length)
 {
     int d1, d2;     // integer & fractional parts
-    float f2;     	// fractional part
+    float f2;         // fractional part
     uint8_t i = Length;
 
     /* --- Convert to string, fixed 5 digit with float point position --- */
@@ -290,12 +272,12 @@ void NGL_floatToString(char *ValText, float Value, uint8_t Length)
         }
     }
 
-    d1 = Value;		// Get the integer part
+    d1 = Value;        // Get the integer part
 
     if(i != 0)
     {
-        f2 = Value - d1;     					// Get fractional part
-        d2 = truncf(f2 * pow10f(i));		// Turn into integer
+        f2 = Value - d1;                         // Get fractional part
+        d2 = truncf(f2 * pow10f(i));        // Turn into integer
 
         NGL_uintToFixedString(d1, ValText, Length - i);
         ValText[strlen(ValText)] = '.';

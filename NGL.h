@@ -79,6 +79,7 @@ extern uint16_t NGL_Font_DrawString(uint16_t X, uint16_t Y, uint16_t Color, cons
 extern uint16_t NGL_Font_DrawFastString(uint16_t XPos, uint16_t YPos, NGL_TransparentState trspr, char *str);
 extern uint16_t NGL_Font_DrawColorString(uint16_t X, uint16_t Y, uint16_t Color, NGL_TransparentState trspr, char *str);
 extern uint16_t NGL_Font_DrawCropString(uint16_t X, uint16_t Y, NGL_TransparentState trspr, char *str, uint8_t Pos, uint8_t Lenght, uint16_t Color);
+extern uint16_t NGL_Font_MeasureStringFast(const NGL_Font *nfont, char *str);
 extern uint16_t NGL_Font_MeasureStringWidth(const NGL_Font *nfont, char *str);
 extern uint16_t NGL_Font_MeasureCropStringWidth(char *str, uint8_t NumSymbols);
 //extern void NGL_uintToString(uint32_t Num, char* Str);
