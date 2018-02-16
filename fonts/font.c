@@ -207,11 +207,11 @@ uint16_t NGL_Font_DrawCropString(uint16_t X, uint16_t Y, NGL_TransparentState tr
   * @param  Pointer to measuring string
   * @retval String width
   */
-uint16_t NGL_Font_MeasureStringWidth(NGL_Font *_nfont, char *str)
+uint16_t NGL_Font_MeasureStringWidth(const NGL_Font *nfont, char *str)
 {
 	uint16_t Pos = 0;
 
-  NGL_Font_SetFont(_nfont);
+  NGL_Font_SetFont(nfont);
 
 	/* пока есть символы в строке */
 	while(*str != 0)
